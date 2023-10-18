@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="1" author="krasnikov" context="schema">
+        <preConditions>
+            <not>
+                <tableExists tableName="geo_parties"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="geo_parties">
+            <column name="id" type="bigserial" remarks="Id мероприятия" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="text" remarks="Название мероприятия">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text" remarks="Описание мероприятия">
+                <constraints nullable="false"/>
+            </column>
+            <column name="city" type="text" remarks="Имя города, в котором проходит мероприятие">
+                <constraints nullable="false"/>
+            </column>
+            <column name="location" type="jsonb" remarks="Местоположение мероприятия">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creator" type="text" remarks="Создатель мероприятия">
+                <constraints nullable="false"/>
+            </column>
+            <column name="participants" type="jsonb" remarks="Пользователи, которые записались на мероприятие"/>
+            <column name="limit" type="integer" remarks="Ограничение по людям">
+                <constraints nullable="false"/>
+            </column>
+            <column name="visibility" type="text" remarks="Пользователи, которым можно видеть данное мероприятие">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
