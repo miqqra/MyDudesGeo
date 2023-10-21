@@ -16,7 +16,7 @@ spring:
     change-log: classpath:migrations/master.xml
     contexts: schema, data
 
-springdoc:
-  swagger-ui:
-    enabled: true
-    path: /swagger-ui
+app:
+  api:
+    swagger:
+      enable: true
