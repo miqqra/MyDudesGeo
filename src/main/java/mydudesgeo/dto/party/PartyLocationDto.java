@@ -1,4 +1,4 @@
-package mydudesgeo.dto;
+package mydudesgeo.dto.party;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

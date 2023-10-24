@@ -7,12 +7,9 @@ import mydudesgeo.mapper.PartyMapper;
 import mydudesgeo.model.PartyModel;
 import mydudesgeo.repository.PartyRepository;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.image.ImageProducer;
 import java.util.Optional;
 
 @Service
@@ -24,12 +21,10 @@ public class PartyDataService {
     private final PartyMapper mapper;
 
     @Transactional
-    public PartyModel updatePartyVisibility(Long id, Visibility visibility){
-        PartyModel party = Optional.of(id)
+    public PartyModel updatePartyVisibility(Long id, Visibility visibility) {
+        return Optional.of(id)
                 .flatMap(repository::findById)
-                .map(mapper::toModel)
-                .map(partyModel -> partyModel.setVisibility(visibility))
-                .map(mapper::toEntity)
+                .map(party -> party.setVisibility(visibility))
                 .map(repository::save)
                 .map(mapper::toModel)
                 .orElseThrow(() -> ClientException.of(HttpStatus.NOT_FOUND, "Мероприятие не найдено"));

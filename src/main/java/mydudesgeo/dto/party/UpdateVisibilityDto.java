@@ -1,4 +1,4 @@
-package mydudesgeo.dto;
+package mydudesgeo.dto.party;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

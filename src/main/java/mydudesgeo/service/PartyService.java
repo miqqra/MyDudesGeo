@@ -3,9 +3,9 @@ package mydudesgeo.service;
 import lombok.RequiredArgsConstructor;
 import mydudesgeo.data.Visibility;
 import mydudesgeo.dataservice.PartyDataService;
-import mydudesgeo.dto.PartyDto;
-import mydudesgeo.dto.PartyLocationDto;
-import mydudesgeo.dto.UpdateVisibilityDto;
+import mydudesgeo.dto.party.PartyDto;
+import mydudesgeo.dto.party.PartyLocationDto;
+import mydudesgeo.dto.party.UpdateVisibilityDto;
 import mydudesgeo.mapper.PartyMapper;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +20,11 @@ public class PartyService {
 
     private final PartyMapper mapper;
 
-    public List<PartyLocationDto> getPartiesAround(Integer radius, Double coordX, Double coordY){
+    public List<PartyLocationDto> getPartiesAround(Integer radius, Double coordX, Double coordY) {
         return null;
     }
 
-    public PartyDto updatePartyVisibility(UpdateVisibilityDto dto){
+    public PartyDto updatePartyVisibility(UpdateVisibilityDto dto) {
         return Optional.of(dto)
                 .map(UpdateVisibilityDto::getVisibility)
                 .map(Visibility::getEnum)

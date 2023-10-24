@@ -4,10 +4,9 @@ package mydudesgeo.controller.user;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import mydudesgeo.dto.PartyDto;
-import mydudesgeo.dto.PartyLocationDto;
-import mydudesgeo.dto.UpdateVisibilityDto;
+import mydudesgeo.dto.party.PartyDto;
+import mydudesgeo.dto.party.PartyLocationDto;
+import mydudesgeo.dto.party.UpdateVisibilityDto;
 import mydudesgeo.service.PartyCategoryService;
 import mydudesgeo.service.PartyService;
 import org.springframework.validation.annotation.Validated;
@@ -56,13 +55,13 @@ public class UserPartyController {
 
     @Operation(description = "Редактирование мероприятия")
     @PutMapping
-    public void updateParty(){
+    public void updateParty() {
 
     }
 
     @Operation(description = "Редактирование видимости мероприятия")
     @PutMapping("/visibility")
-    public PartyDto updatePartyVisibility(@Validated @RequestBody UpdateVisibilityDto dto){
+    public PartyDto updatePartyVisibility(@Validated @RequestBody UpdateVisibilityDto dto) {
         return partyService.updatePartyVisibility(dto);
     }
 

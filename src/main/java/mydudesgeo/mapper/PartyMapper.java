@@ -1,7 +1,6 @@
 package mydudesgeo.mapper;
 
-import mydudesgeo.dataservice.PartyDataService;
-import mydudesgeo.dto.PartyDto;
+import mydudesgeo.dto.party.PartyDto;
 import mydudesgeo.entity.Party;
 import mydudesgeo.model.PartyModel;
 import org.mapstruct.Mapper;

@@ -1,4 +1,4 @@
-package mydudesgeo.dto;
+package mydudesgeo.dto.party;
 
 import lombok.Data;
 import mydudesgeo.data.PointData;

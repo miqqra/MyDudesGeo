@@ -6,4 +6,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PartyCategoryRepository extends JpaRepository<PartyCategory, Long> {
+
+    boolean existsById(Long id);
+
+    boolean existsByCategory(String category);
 }
