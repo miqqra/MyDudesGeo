@@ -8,13 +8,19 @@ spring:
     username: postgres
     password: postgres
   jpa:
-#    show-sql: true
-#    hibernate:
-#      ddl-auto: none
+    #    show-sql: true
+    #    hibernate:
+    #      ddl-auto: none
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   liquibase:
     change-log: classpath:migrations/master.xml
     contexts: schema, data
+
+mydudes:
+  config:
+    limit: 100
+    categories:
+      number: 3
 
 app:
   api:

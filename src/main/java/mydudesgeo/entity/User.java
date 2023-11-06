@@ -5,16 +5,18 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import mydudesgeo.data.PointData;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+import org.springframework.data.geo.Point;
 
 import java.time.LocalDateTime;
 
-@Entity(name = "geo_users")
+@Entity
+@Table(name = "geo_users")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -30,7 +32,7 @@ public class User {
 
     @Column(name = "location")
     @JdbcTypeCode(SqlTypes.JSON)
-    private PointData location;
+    private Point location;
 
     @Column(name = "time")
     private LocalDateTime time;

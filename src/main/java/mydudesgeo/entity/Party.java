@@ -5,17 +5,21 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import mydudesgeo.data.PointData;
 import mydudesgeo.data.Visibility;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+import org.springframework.data.geo.Point;
 
 import java.util.List;
 
-@Entity(name = "geo_parties")
+@Entity
+@Table(name = "geo_parties")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -32,12 +36,14 @@ public class Party {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "category")
-    private String category;
+    @Column(name = "categories")
+    @OneToOne
+    @JoinColumn(name = "category")
+    private PartyCategory category;
 
     @Column(name = "location")
     @JdbcTypeCode(SqlTypes.JSON)
-    private PointData location;
+    private Point location;
 
     @Column(name = "creator")
     private String creator;

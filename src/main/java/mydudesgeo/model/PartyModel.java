@@ -1,8 +1,8 @@
 package mydudesgeo.model;
 
 import lombok.Data;
-import mydudesgeo.data.PointData;
 import mydudesgeo.data.Visibility;
+import org.springframework.data.geo.Point;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public class PartyModel {
     private String name;
     private String description;
     private String category;
-    private PointData location;
+    private Point location;
     private String creator;
     private List<String> participants;
     private Integer limits;

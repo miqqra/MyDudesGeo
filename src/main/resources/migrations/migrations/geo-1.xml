@@ -20,7 +20,7 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="category" type="text" remarks="Тип мероприятия">
-                <constraints primaryKey="true"/>
+                <constraints unique="true"/>
             </column>
         </createTable>
     </changeSet>

@@ -1,31 +1,41 @@
 package mydudesgeo.dto.party;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import mydudesgeo.data.Visibility;
 import org.springframework.data.geo.Point;
 
-import java.util.List;
-
 @Data
-public class PartyDto {
+@Schema(description = "Запрос на создание мероприятия")
+public class CreatePartyDto {
 
-    @Schema(description = "Id мероприятия")
-    private Long id;
+    @NotBlank
     @Schema(description = "Название мероприятия")
     private String name;
-    @Schema(description = "описание мероприятия")
+
+    @NotBlank
+    @Schema(description = "Описание мероприятия")
     private String description;
+
+    @NotBlank
     @Schema(description = "Категория мероприятия")
     private String category;
-    @Schema(description = "локация мероприятия")
+
+    @NotNull
+    @Schema(description = "Локация мероприятия")
     private Point location;
-    @Schema(description = "id организатора")
+
+    @NotBlank
+    @Schema(description = "Id организатора")
     private String creator;
-    @Schema(description = "список участников")
-    private List<String> participants;
+
     @Schema(description = "Ограничение по количеству человек")
     private Integer limits;
+
+    @NotNull
     @Schema(description = "Видимость мероприятия")
     private Visibility visibility;
+
 }
