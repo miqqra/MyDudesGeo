@@ -25,12 +25,10 @@ public abstract class PartyMapper {
 
     public abstract PartyDto toDto(PartyModel source);
 
-    public abstract PartyModel toModel(PartyDto source);
-
     public abstract PartyLocationDto toLocationDto(PartyModel source);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "patricipants", ignore = true)
+    @Mapping(target = "participants", ignore = true)
     @Mapping(target = "limits", ignore = true)
     public abstract PartyModel toModel(CreatePartyDto source);
 

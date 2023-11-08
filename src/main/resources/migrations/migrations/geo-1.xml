@@ -64,6 +64,12 @@
                     remarks="Пользователи, которым можно видеть данное мероприятие">
                 <constraints nullable="false"/>
             </column>
+            <column name="start_time" type="timestamptz"
+                    remarks="Время начала мероприятия">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_time" type="timestamptz"
+                    remarks="Время конца мероприятия"/>
         </createTable>
 
         <addForeignKeyConstraint constraintName="fk-category"

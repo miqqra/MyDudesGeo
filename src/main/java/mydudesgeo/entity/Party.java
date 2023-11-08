@@ -5,8 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +14,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.springframework.data.geo.Point;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Entity
@@ -36,10 +35,8 @@ public class Party {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "categories")
-    @OneToOne
-    @JoinColumn(name = "category")
-    private PartyCategory category;
+    @Column(name = "category")
+    private String category;
 
     @Column(name = "location")
     @JdbcTypeCode(SqlTypes.JSON)
@@ -57,4 +54,10 @@ public class Party {
 
     @Column(name = "visibility")
     private Visibility visibility;
+
+    @Column(name = "start_time")
+    private ZonedDateTime startTime;
+
+    @Column(name = "end_time")
+    private ZonedDateTime endTime;
 }

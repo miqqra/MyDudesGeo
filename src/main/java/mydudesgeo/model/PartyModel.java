@@ -4,6 +4,7 @@ import lombok.Data;
 import mydudesgeo.data.Visibility;
 import org.springframework.data.geo.Point;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Data
@@ -18,5 +19,7 @@ public class PartyModel {
     private List<String> participants;
     private Integer limits;
     private Visibility visibility;
+    private ZonedDateTime startTime;
+    private ZonedDateTime endTime;
 
 }

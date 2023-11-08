@@ -22,7 +22,7 @@ mydudes:
     categories:
       number: 3
 
-app:
-  api:
-    swagger:
-      enable: true
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui

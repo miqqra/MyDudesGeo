@@ -7,6 +7,8 @@ import lombok.Data;
 import mydudesgeo.data.Visibility;
 import org.springframework.data.geo.Point;
 
+import java.time.ZonedDateTime;
+
 @Data
 @Schema(description = "Запрос на создание мероприятия")
 public class CreatePartyDto {
@@ -37,5 +39,11 @@ public class CreatePartyDto {
     @NotNull
     @Schema(description = "Видимость мероприятия")
     private Visibility visibility;
+
+    @NotNull
+    @Schema(description = "Время начала мероприятия")
+    private ZonedDateTime startTime;
+    @Schema(description = "Время конца мероприятия")
+    private ZonedDateTime endTime;
 
 }
