@@ -109,4 +109,46 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="4" author="krasnikov" context="schema">
+        <preConditions>
+            <not>
+                <tableExists tableName="geo_friends"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="geo_friends">
+            <column name="id" type="bigserial" remarks="Id"
+                    autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="person" type="text" remarks="Id пользователя">
+                <constraints nullable="false"/>
+            </column>
+            <column name="friend" type="text" remarks="Id друга">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="5" author="krasnikov" context="schema">
+        <preConditions>
+            <not>
+                <tableExists tableName="geo_close_friends"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="geo_close_friends">
+            <column name="id" type="bigserial" remarks="Id"
+                    autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="person" type="text" remarks="Id пользователя">
+                <constraints nullable="false"/>
+            </column>
+            <column name="friend" type="text" remarks="Id близкого друга">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>
