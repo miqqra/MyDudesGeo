@@ -18,10 +18,10 @@ public abstract class FriendMapper {
     public abstract FriendTemplate toEntity(String person, String friend);
 
     @Mapping(target = "friends", ignore = true)
-    public abstract FriendModel toModel(List<FriendTemplate> source, String person, Visibility visibility);
+    public abstract FriendModel toModel(List<? extends FriendTemplate> source, String person, Visibility visibility);
 
     @AfterMapping
-    protected void postMap(@MappingTarget FriendModel target, List<FriendTemplate> source, String person, Visibility visibility) {
+    protected void postMap(@MappingTarget FriendModel target, List<? extends FriendTemplate> source, String person, Visibility visibility) {
         Optional.of(source)
                 .map(s -> s
                         .stream()

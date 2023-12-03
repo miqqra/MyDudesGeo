@@ -3,53 +3,41 @@ package mydudesgeo.dataservice;
 import com.vladmihalcea.hibernate.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import mydudesgeo.data.Visibility;
+import mydudesgeo.entity.friends.CloseFriends;
+import mydudesgeo.entity.friends.FriendTemplate;
+import mydudesgeo.entity.friends.Friends;
 import mydudesgeo.exception.ClientException;
 import mydudesgeo.mapper.FriendMapper;
 import mydudesgeo.model.FriendModel;
 import mydudesgeo.model.PartyModel;
-import mydudesgeo.repository.friend.AllUsersRepository;
 import mydudesgeo.repository.friend.CloseFriendsRepository;
-import mydudesgeo.repository.friend.FriendTemplateRepository;
 import mydudesgeo.repository.friend.FriendsRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Map;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class FriendsDataService {
 
-    private final AllUsersRepository allUsersRepository;
     private final FriendsRepository friendsRepository;
     private final CloseFriendsRepository closeFriendsRepository;
 
     private final FriendMapper mapper;
 
-    private final Map<Visibility, FriendTemplateRepository>
-            friendsRepos = Map.of(
-            Visibility.ALL, allUsersRepository,
-            Visibility.FRIENDS, friendsRepository,
-            Visibility.CLOSE_FRIENDS, closeFriendsRepository
-    );
-
     @Transactional(readOnly = true)
     public boolean friendExists(Visibility visibility, String person, String friend) {
         return Optional.of(visibility)
-                .map(friendsRepos::get)
-                .map(friendTemplateRepository ->
-                        friendTemplateRepository.existsByFriendAndPerson(person, friend))
+                .map(v -> existsByPersonAndFriend(v, person, friend))
                 .orElseThrow(() -> ClientException.of(HttpStatus.NOT_FOUND, "Ошибка при проверке категории друзей"));
     }
 
     @Transactional(readOnly = true)
     public FriendModel getFriends(Visibility visibility, String authUser) {
-        return Optional.of(visibility) //todo all visibility??
-                .map(friendsRepos::get)
-                .map(repository -> repository.findAllByPerson(authUser))
-                .map(friendTemplate -> mapper.toModel(friendTemplate, authUser, visibility))
+        return Optional.of(visibility)
+                .map(v -> getAll(visibility, authUser))
                 .orElse(null);
     }
 
@@ -57,14 +45,14 @@ public class FriendsDataService {
     public FriendModel addFriend(Visibility visibility, String person, String friend) {
         Optional.of(person)
                 .map(v -> mapper.toEntity(v, friend))
-                .map(friendTemplate -> friendsRepos.get(visibility).save(friendTemplate));
+                .ifPresent(entity -> save(visibility, entity));
 
         return getFriends(visibility, person);
     }
 
     @Transactional
     public void deleteFriend(Visibility visibility, String person, String friend) {
-        friendsRepos.get(visibility).deleteByPersonAndFriend(person, friend);
+        deleteByPersonAndFriend(visibility, person, friend);
     }
 
     @Transactional(readOnly = true)
@@ -81,6 +69,47 @@ public class FriendsDataService {
             throw ClientException.of(HttpStatus.BAD_REQUEST, "Не указан пользователь");
         }
 
-        return friendsRepos.get(visibility).existsByFriendAndPerson(friend, user);
+        return existsByPersonAndFriend(visibility, friend, user);
+    }
+
+    private boolean existsByPersonAndFriend(Visibility visibility, String person, String friend) {
+        return switch (visibility) {
+            case FRIENDS ->
+                    friendsRepository.existsByFriendAndPerson(friend, person);
+            case CLOSE_FRIENDS ->
+                    closeFriendsRepository.existsByFriendAndPerson(friend, person);
+            case ALL -> true;
+        };
+    }
+
+    private FriendModel getAll(Visibility visibility, String person) {
+        return switch (visibility) {
+            case FRIENDS ->
+                    mapper.toModel(friendsRepository.findAllByPerson(person), person, visibility);
+            case CLOSE_FRIENDS ->
+                    mapper.toModel(closeFriendsRepository.findAllByPerson(person), person, visibility);
+            case ALL -> FriendModel.emptyFriendList(visibility, person);
+        };
+    }
+
+    private void deleteByPersonAndFriend(Visibility visibility, String person, String friend) {
+        switch (visibility) {
+            case FRIENDS ->
+                    friendsRepository.deleteByPersonAndFriend(friend, person);
+            case CLOSE_FRIENDS ->
+                    closeFriendsRepository.deleteByPersonAndFriend(friend, person);
+            case ALL -> {
+            }
+        }
+    }
+
+    private void save(Visibility visibility, FriendTemplate friendTemplate) {
+        switch (visibility) {
+            case FRIENDS -> friendsRepository.save((Friends) friendTemplate);
+            case CLOSE_FRIENDS ->
+                    closeFriendsRepository.save((CloseFriends) friendTemplate);
+            case ALL -> {
+            }
+        }
     }
 }
