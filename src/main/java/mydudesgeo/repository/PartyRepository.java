@@ -1,7 +1,7 @@
 package mydudesgeo.repository;
 
+import mydudesgeo.data.Point;
 import mydudesgeo.entity.Party;
-import org.springframework.data.geo.Point;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -23,11 +23,20 @@ public interface PartyRepository extends JpaRepository<Party, Long> {
 //        ) < :radius * 1000
 //        """)
 
+    //    @Query("""
+//            select p from Party p where
+//            SQRT(cast(
+//                    POW(cast(jsonb_extract_path_text(p.location, 'x') as float) - :#{#location.x}, 2) +
+//                    POW(cast(jsonb_extract_path_text(p.location, 'y') as float) - :#{#location.y}, 2)
+//                as float)
+//            )
+//            < :radius * 1000
+//            """)
     @Query("""
             select p from Party p where
             SQRT(cast(
                     POW(cast(jsonb_extract_path_text(p.location, 'x') as float) - :#{#location.x}, 2) +
-                    POW(cast(jsonb_extract_path_text(p.location, 'x') as float) - :#{#location.y}, 2)
+                    POW(cast(jsonb_extract_path_text(p.location, 'y') as float) - :#{#location.y}, 2)
                 as float)
             )
             < :radius * 1000

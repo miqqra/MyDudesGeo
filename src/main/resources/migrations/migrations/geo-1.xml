@@ -7,7 +7,7 @@
         logicalFilePath="migrations/migrations/geo-1.xml">
 
     <changeSet id="1" author="krasnikov" context="schema">
-        <preConditions>
+        <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="geo_parties_category"/>
             </not>
@@ -26,7 +26,7 @@
     </changeSet>
 
     <changeSet id="2" author="krasnikov" context="schema">
-        <preConditions>
+        <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="geo_parties"/>
             </not>
@@ -57,7 +57,7 @@
             </column>
             <column name="participants" type="jsonb"
                     remarks="Пользователи, которые записались на мероприятие"/>
-            <column name="limit" type="integer" remarks="Ограничение по людям">
+            <column name="limits" type="integer" remarks="Ограничение по людям">
                 <constraints nullable="false"/>
             </column>
             <column name="visibility" type="text"
@@ -80,7 +80,7 @@
     </changeSet>
 
     <changeSet id="3" author="krasnikov" context="schema">
-        <preConditions>
+        <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="geo_users"/>
             </not>
@@ -102,7 +102,7 @@
                     remarks="Время считывания позиции">
                 <constraints nullable="false"/>
             </column>
-            <column name="freeze" type="boolean"
+            <column name="freezed" type="boolean"
                     remarks="Заморозка местоположения">
                 <constraints nullable="false"/>
             </column>
@@ -110,7 +110,7 @@
     </changeSet>
 
     <changeSet id="4" author="krasnikov" context="schema">
-        <preConditions>
+        <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="geo_friends"/>
             </not>
@@ -131,7 +131,7 @@
     </changeSet>
 
     <changeSet id="5" author="krasnikov" context="schema">
-        <preConditions>
+        <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="geo_close_friends"/>
             </not>

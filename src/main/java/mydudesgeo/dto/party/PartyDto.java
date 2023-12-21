@@ -2,8 +2,8 @@ package mydudesgeo.dto.party;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import mydudesgeo.data.Point;
 import mydudesgeo.data.Visibility;
-import org.springframework.data.geo.Point;
 
 import java.time.ZonedDateTime;
 import java.util.List;

@@ -4,8 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import mydudesgeo.data.Point;
 import mydudesgeo.data.Visibility;
-import org.springframework.data.geo.Point;
 
 import java.time.ZonedDateTime;
 

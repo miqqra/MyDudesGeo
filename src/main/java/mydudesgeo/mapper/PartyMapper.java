@@ -17,7 +17,7 @@ import java.util.Collections;
 public abstract class PartyMapper {
 
     @Value("${mydudes.config.limit:0}")
-    private Integer limit;
+    private Integer limits;
 
     public abstract PartyModel toModel(Party source);
 
@@ -39,6 +39,6 @@ public abstract class PartyMapper {
         }
 
         target.setParticipants(Collections.emptyList());
-        target.setLimits(source.getLimits() == null ? limit : source.getLimits());
+        target.setLimits(source.getLimits() == null ? limits : source.getLimits());
     }
 }

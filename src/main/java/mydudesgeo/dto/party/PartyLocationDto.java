@@ -2,7 +2,7 @@ package mydudesgeo.dto.party;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import org.springframework.data.geo.Point;
+import mydudesgeo.data.Point;
 
 @Data
 public class PartyLocationDto {

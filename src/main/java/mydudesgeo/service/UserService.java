@@ -1,11 +1,11 @@
 package mydudesgeo.service;
 
 import lombok.RequiredArgsConstructor;
+import mydudesgeo.data.Point;
 import mydudesgeo.dataservice.UserDataService;
 import mydudesgeo.dto.user.UserDto;
 import mydudesgeo.exception.ClientException;
 import mydudesgeo.mapper.UserMapper;
-import org.springframework.data.geo.Point;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +20,10 @@ public class UserService {
     private final UserMapper mapper;
 
     public void updateLocation(String name, Point newLocation) {
+        if (!dataService.existsByName(name)) {
+            dataService.createUser(name, newLocation);
+        }
+
         Optional.of(name)
                 .map(userName -> dataService.updateLocation(userName, newLocation))
                 .orElseThrow(() -> ClientException.of(HttpStatus.NOT_FOUND, "Такого пользователя не существует"));

@@ -47,7 +47,7 @@ public class FriendsService {
                 .map(this::validateVisibility)
                 .orElse(null);
 
-        if (dataService.friendExists(visibilityValue, authUser, friend)) {
+        if (!dataService.friendExists(visibilityValue, authUser, friend)) {
             throw ClientException.of(HttpStatus.BAD_REQUEST, "Такого пользователя нет в категории друзей");
         }
 

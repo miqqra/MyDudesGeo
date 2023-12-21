@@ -8,7 +8,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -16,7 +15,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
-@NoArgsConstructor
 public class Friends extends FriendTemplate {
 
     @Id
@@ -24,4 +22,10 @@ public class Friends extends FriendTemplate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
+    @Column(name = "person")
+    private String person;
+
+    @Column(name = "friend")
+    private String friend;
 }

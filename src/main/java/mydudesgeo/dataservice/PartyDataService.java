@@ -1,13 +1,13 @@
 package mydudesgeo.dataservice;
 
 import lombok.RequiredArgsConstructor;
+import mydudesgeo.data.Point;
 import mydudesgeo.data.Visibility;
 import mydudesgeo.dto.party.UpdatePartyDto;
 import mydudesgeo.exception.ClientException;
 import mydudesgeo.mapper.PartyMapper;
 import mydudesgeo.model.PartyModel;
 import mydudesgeo.repository.PartyRepository;
-import org.springframework.data.geo.Point;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

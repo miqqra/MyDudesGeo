@@ -10,11 +10,11 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import mydudesgeo.data.Point;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-import org.springframework.data.geo.Point;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "geo_users")
@@ -38,8 +38,8 @@ public class User {
     private Point location;
 
     @Column(name = "time")
-    private LocalDateTime time;
+    private ZonedDateTime time;
 
-    @Column(name = "freeze")
+    @Column(name = "freezed")
     private boolean freeze;
 }

@@ -1,8 +1,8 @@
 package mydudesgeo.model;
 
 import lombok.Data;
+import mydudesgeo.data.Point;
 import mydudesgeo.data.Visibility;
-import org.springframework.data.geo.Point;
 
 import java.time.ZonedDateTime;
 import java.util.List;

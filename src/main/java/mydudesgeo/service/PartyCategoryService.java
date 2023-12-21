@@ -40,7 +40,7 @@ public class PartyCategoryService {
     }
 
     public PartyCategoryDto updateCategory(PartyCategoryDto dto) {
-        if (dataService.existsById(dto.getId())) {
+        if (!dataService.existsById(dto.getId())) {
             throw ClientException.of(HttpStatus.NOT_FOUND, "Такой категории не существует");
         }
 

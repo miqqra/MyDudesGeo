@@ -1,7 +1,7 @@
 package mydudesgeo.dto.user;
 
 import lombok.Data;
-import org.springframework.data.geo.Point;
+import mydudesgeo.data.Point;
 
 import java.time.LocalDateTime;
 

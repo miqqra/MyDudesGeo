@@ -2,32 +2,36 @@ package mydudesgeo.mapper;
 
 import mydudesgeo.data.Visibility;
 import mydudesgeo.dto.friend.FriendsDto;
-import mydudesgeo.entity.friends.FriendTemplate;
+import mydudesgeo.entity.friends.CloseFriends;
+import mydudesgeo.entity.friends.Friends;
 import mydudesgeo.model.FriendModel;
-import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 
 import java.util.List;
-import java.util.Optional;
 
 @Mapper
 public abstract class FriendMapper {
 
-    public abstract FriendTemplate toEntity(String person, String friend);
+    public abstract CloseFriends toEntityCloseFriends(String person, String friend);
 
-    @Mapping(target = "friends", ignore = true)
-    public abstract FriendModel toModel(List<? extends FriendTemplate> source, String person, Visibility visibility);
+    public abstract Friends toEntityFriends(String person, String friend);
 
-    @AfterMapping
-    protected void postMap(@MappingTarget FriendModel target, List<? extends FriendTemplate> source, String person, Visibility visibility) {
-        Optional.of(source)
-                .map(s -> s
-                        .stream()
-                        .map(FriendTemplate::getFriend)
-                        .toList())
-                .map(target::setFriends);
+    @Mapping(target = "friends", source = "source", qualifiedByName = "mapFriends")
+    public abstract FriendModel toModelFriends(List<Friends> source, String person, Visibility visibility);
+
+    @Mapping(target = "friends", source = "source", qualifiedByName = "mapCloseFriends")
+    public abstract FriendModel toModelCloseFriends(List<CloseFriends> source, String person, Visibility visibility);
+
+    @Named("mapFriends")
+    protected List<String> mapFriends(List<Friends> source) {
+        return source.stream().map(Friends::getFriend).toList();
+    }
+
+    @Named("mapCloseFriends")
+    protected List<String> mapCloseFriends(List<CloseFriends> source) {
+        return source.stream().map(CloseFriends::getFriend).toList();
     }
 
     public abstract FriendsDto toDto(FriendModel source);

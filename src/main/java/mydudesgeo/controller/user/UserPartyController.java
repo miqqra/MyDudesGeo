@@ -3,6 +3,7 @@ package mydudesgeo.controller.user;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
+import mydudesgeo.data.Point;
 import mydudesgeo.dto.party.CreatePartyDto;
 import mydudesgeo.dto.party.PartyDto;
 import mydudesgeo.dto.party.PartyLocationDto;
@@ -10,7 +11,6 @@ import mydudesgeo.dto.party.UpdatePartyDto;
 import mydudesgeo.dto.party.UpdateVisibilityDto;
 import mydudesgeo.service.PartyCategoryService;
 import mydudesgeo.service.PartyService;
-import org.springframework.data.geo.Point;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,9 +51,9 @@ public class UserPartyController {
     }
 
     @Operation(description = "Получение информации об определенном мероприятии")
-    @GetMapping("/{id}")
+    @GetMapping
     public PartyDto getParty(
-            @Parameter(description = "id мероприятия", required = true) @PathVariable Long id,
+            @Parameter(description = "id мероприятия", required = true) @RequestParam Long id,
             @Parameter(description = "id пользователя, который ищет мероприятие") @RequestParam String authUser) {
         return service.getParty(id, authUser);
     }

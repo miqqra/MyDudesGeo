@@ -1,9 +1,9 @@
 package mydudesgeo.model;
 
 import lombok.Data;
-import org.springframework.data.geo.Point;
+import mydudesgeo.data.Point;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Data
 public class UserModel {
@@ -11,6 +11,6 @@ public class UserModel {
     private Long id;
     private String name;
     private Point location;
-    private LocalDateTime time;
+    private ZonedDateTime time;
     private boolean freeze;
 }

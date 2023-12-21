@@ -4,7 +4,6 @@ import com.vladmihalcea.hibernate.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import mydudesgeo.data.Visibility;
 import mydudesgeo.entity.friends.CloseFriends;
-import mydudesgeo.entity.friends.FriendTemplate;
 import mydudesgeo.entity.friends.Friends;
 import mydudesgeo.exception.ClientException;
 import mydudesgeo.mapper.FriendMapper;
@@ -43,10 +42,13 @@ public class FriendsDataService {
 
     @Transactional
     public FriendModel addFriend(Visibility visibility, String person, String friend) {
-        Optional.of(person)
-                .map(v -> mapper.toEntity(v, friend))
-                .ifPresent(entity -> save(visibility, entity));
-
+        switch (visibility) {
+            case FRIENDS -> save(mapper.toEntityFriends(person, friend));
+            case CLOSE_FRIENDS ->
+                    save(mapper.toEntityCloseFriends(person, friend));
+            default -> {
+            }
+        }
         return getFriends(visibility, person);
     }
 
@@ -85,9 +87,9 @@ public class FriendsDataService {
     private FriendModel getAll(Visibility visibility, String person) {
         return switch (visibility) {
             case FRIENDS ->
-                    mapper.toModel(friendsRepository.findAllByPerson(person), person, visibility);
+                    mapper.toModelFriends(friendsRepository.findAllByPerson(person), person, visibility);
             case CLOSE_FRIENDS ->
-                    mapper.toModel(closeFriendsRepository.findAllByPerson(person), person, visibility);
+                    mapper.toModelCloseFriends(closeFriendsRepository.findAllByPerson(person), person, visibility);
             case ALL -> FriendModel.emptyFriendList(visibility, person);
         };
     }
@@ -95,21 +97,19 @@ public class FriendsDataService {
     private void deleteByPersonAndFriend(Visibility visibility, String person, String friend) {
         switch (visibility) {
             case FRIENDS ->
-                    friendsRepository.deleteByPersonAndFriend(friend, person);
+                    friendsRepository.deleteByPersonAndFriend(person, friend);
             case CLOSE_FRIENDS ->
-                    closeFriendsRepository.deleteByPersonAndFriend(friend, person);
+                    closeFriendsRepository.deleteByPersonAndFriend(person, friend);
             case ALL -> {
             }
         }
     }
 
-    private void save(Visibility visibility, FriendTemplate friendTemplate) {
-        switch (visibility) {
-            case FRIENDS -> friendsRepository.save((Friends) friendTemplate);
-            case CLOSE_FRIENDS ->
-                    closeFriendsRepository.save((CloseFriends) friendTemplate);
-            case ALL -> {
-            }
-        }
+    private void save(Friends friends) {
+        friendsRepository.save(friends);
+    }
+
+    private void save(CloseFriends friends) {
+        closeFriendsRepository.save(friends);
     }
 }
