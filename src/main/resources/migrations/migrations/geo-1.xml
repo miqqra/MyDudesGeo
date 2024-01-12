@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd"
+        logicalFilePath="migrations/migrations/geo-1.xml">
+
+    <changeSet id="1" author="krasnikov" context="schema">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="geo_parties_category"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="geo_parties_category">
+            <column name="id" type="bigserial"
+                    remarks="Id категории мероприятия"
+                    autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="category" type="text" remarks="Тип мероприятия">
+                <constraints unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="krasnikov" context="schema">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="geo_parties"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="geo_parties">
+            <column name="id" type="bigserial" remarks="Id мероприятия"
+                    autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="text" remarks="Название мероприятия">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text"
+                    remarks="Описание мероприятия">
+                <constraints nullable="false"/>
+            </column>
+            <column name="category" type="text"
+                    remarks="Тип мероприятия">
+                <constraints nullable="false"/>
+            </column>
+            <column name="location" type="jsonb"
+                    remarks="Местоположение мероприятия">
+                <constraints nullable="false"/>
+            </column>
+            <column name="creator" type="text" remarks="Создатель мероприятия">
+                <constraints nullable="false"/>
+            </column>
+            <column name="participants" type="jsonb"
+                    remarks="Пользователи, которые записались на мероприятие"/>
+            <column name="limits" type="integer" remarks="Ограничение по людям">
+                <constraints nullable="false"/>
+            </column>
+            <column name="visibility" type="text"
+                    remarks="Пользователи, которым можно видеть данное мероприятие">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_time" type="timestamptz"
+                    remarks="Время начала мероприятия">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_time" type="timestamptz"
+                    remarks="Время конца мероприятия"/>
+        </createTable>
+
+        <addForeignKeyConstraint constraintName="fk-category"
+                                 baseTableName="geo_parties"
+                                 baseColumnNames="category"
+                                 referencedTableName="geo_parties_category"
+                                 referencedColumnNames="category"/>
+    </changeSet>
+
+    <changeSet id="3" author="krasnikov" context="schema">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="geo_users"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="geo_users">
+            <column name="id" type="bigserial" remarks="Id мероприятия"
+                    autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="text" remarks="Id пользователя">
+                <constraints nullable="false"/>
+            </column>
+            <column name="location" type="jsonb"
+                    remarks="Местоположение пользователя">
+                <constraints nullable="false"/>
+            </column>
+            <column name="time" type="timestamptz"
+                    remarks="Время считывания позиции">
+                <constraints nullable="false"/>
+            </column>
+            <column name="freezed" type="boolean"
+                    remarks="Заморозка местоположения">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="4" author="krasnikov" context="schema">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="geo_friends"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="geo_friends">
+            <column name="id" type="bigserial" remarks="Id"
+                    autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="person" type="text" remarks="Id пользователя">
+                <constraints nullable="false"/>
+            </column>
+            <column name="friend" type="text" remarks="Id друга">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="5" author="krasnikov" context="schema">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="geo_close_friends"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="geo_close_friends">
+            <column name="id" type="bigserial" remarks="Id"
+                    autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="person" type="text" remarks="Id пользователя">
+                <constraints nullable="false"/>
+            </column>
+            <column name="friend" type="text" remarks="Id близкого друга">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
