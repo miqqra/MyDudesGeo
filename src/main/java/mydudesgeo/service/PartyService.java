@@ -29,7 +29,9 @@ public class PartyService {
 
     private final PartyMapper mapper;
 
-    public List<PartyLocationDto> getPartiesAround(Integer radius, Point location, String authUser) {
+    public List<PartyLocationDto> getPartiesAround(Integer radius, Point location) {
+        String authUser = UserContextService.getCurrentUser();
+
         return Optional.of(radius)
                 .map(r -> dataService.getPartiesAround(r, location))
                 .stream()
@@ -39,7 +41,9 @@ public class PartyService {
                 .toList();
     }
 
-    public PartyDto getParty(Long id, String authUser) {
+    public PartyDto getParty(Long id) {
+        String authUser = UserContextService.getCurrentUser();
+
         return Optional.ofNullable(id)
                 .map(dataService::getParty)
                 .filter(v -> friendsDataService.filterUsers(v, authUser))
@@ -47,7 +51,9 @@ public class PartyService {
                 .orElseThrow(() -> ClientException.of(HttpStatus.NOT_FOUND, "Мероприятие не найдено"));
     }
 
-    public List<PartyDto> getUserParties(String user, String authUser) {
+    public List<PartyDto> getUserParties(String user) {
+        String authUser = UserContextService.getCurrentUser();
+
         return Optional.ofNullable(user)
                 .map(dataService::getUserParties)
                 .stream()
@@ -57,7 +63,7 @@ public class PartyService {
                 .toList();
     }
 
-    public PartyDto createParty(CreatePartyDto dto, String authUser) {
+    public PartyDto createParty(CreatePartyDto dto) {
         //todo checkVisibility
         return Optional.of(dto)
                 .map(mapper::toModel)
@@ -66,7 +72,7 @@ public class PartyService {
                 .orElseThrow(() -> ClientException.of(HttpStatus.BAD_REQUEST, "Не удалось создать мероприятие"));
     }
 
-    public PartyDto updateParty(Long id, UpdatePartyDto dto, String authUser) {
+    public PartyDto updateParty(Long id, UpdatePartyDto dto) {
         //todo checkVisibility
         if (!dataService.existsById(id)) {
             throw ClientException.of(HttpStatus.NOT_FOUND, "Мероприятие не найдено");
@@ -78,17 +84,17 @@ public class PartyService {
                 .orElseThrow(() -> ClientException.of(HttpStatus.BAD_REQUEST, "Ошибка изменения мероприятия"));
     }
 
-    public PartyDto updatePartyVisibility(UpdateVisibilityDto dto, String authUser) {
+    public PartyDto updatePartyVisibility(UpdateVisibilityDto dto) {
         //todo checkVisibility
         return Optional.of(dto)
                 .map(UpdateVisibilityDto::getVisibility)
-                .map(Visibility::getEnum)
+                .map(Visibility::valueOf)
                 .map(v -> dataService.updatePartyVisibility(dto.getId(), v))
                 .map(mapper::toDto)
                 .orElse(null);
     }
 
-    public void deleteParty(Long id, String authUser) {
+    public void deleteParty(Long id) {
         //todo check visivility
         if (!dataService.existsById(id)) {
             throw ClientException.of(HttpStatus.NOT_FOUND, "Мероприятие не найдено");

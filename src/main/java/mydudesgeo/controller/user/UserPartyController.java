@@ -29,62 +29,52 @@ import java.util.List;
 @RequestMapping("api/mydudes/geo/party")
 public class UserPartyController {
 
-    //todo remove authuser
-    //todo replace with spring security context
     private final PartyService service;
-    private final PartyCategoryService partyCategoryService;
 
     @Operation(description = "Получение информации обо всех мероприятиях в радиусе r километров")
     @PostMapping("/around")
     public List<PartyLocationDto> getParties(
             @Parameter(description = "Радиус, в котором будут искаться меропрятия", required = true) @RequestParam Integer r,
-            @RequestBody Point point,
-            @Parameter(description = "id пользователя, который ищет мероприятие") @RequestParam String authUser) {
-        return service.getPartiesAround(r, point, authUser);
+            @RequestBody Point point) {
+        return service.getPartiesAround(r, point);
     }
 
     @Operation(description = "Создание мероприятия")
     @PostMapping
-    public PartyDto createParty(@Validated @RequestBody CreatePartyDto dto,
-                                @Parameter(description = "id пользователя, который ищет мероприятие") @RequestParam String authUser) {
-        return service.createParty(dto, authUser);
+    public PartyDto createParty(@Validated @RequestBody CreatePartyDto dto) {
+        return service.createParty(dto);
     }
 
     @Operation(description = "Получение информации об определенном мероприятии")
     @GetMapping
     public PartyDto getParty(
-            @Parameter(description = "id мероприятия", required = true) @RequestParam Long id,
-            @Parameter(description = "id пользователя, который ищет мероприятие") @RequestParam String authUser) {
-        return service.getParty(id, authUser);
+            @Parameter(description = "id мероприятия", required = true) @RequestParam Long id) {
+        return service.getParty(id);
     }
 
     @Operation(description = "Получение информации о мероприятиях от определенного пользователя")
     @GetMapping("/{user}")
     public List<PartyDto> getUsersParties(
-            @Parameter(description = "id пользователя", required = true) @PathVariable String user,
-            @Parameter(description = "id пользователя, который ищет мероприятие") @RequestParam String authUser) {
-        return service.getUserParties(user, authUser);
+            @Parameter(description = "id пользователя", required = true) @PathVariable String user) {
+        return service.getUserParties(user);
     }
 
     @Operation(description = "Редактирование мероприятия")
     @PutMapping("/{id}")
     public PartyDto updateParty(@Parameter(description = "Id мероприятия", required = true) @PathVariable Long id,
-                                @Validated @RequestBody UpdatePartyDto dto,
-                                @Parameter(description = "id пользователя, который ищет мероприятие") @RequestParam String authUser) {
-        return service.updateParty(id, dto, authUser);
+                                @Validated @RequestBody UpdatePartyDto dto) {
+        return service.updateParty(id, dto);
     }
 
     @Operation(description = "Редактирование видимости мероприятия")
     @PutMapping("/visibility")
-    public PartyDto updatePartyVisibility(@Validated @RequestBody UpdateVisibilityDto dto,
-                                          @Parameter(description = "id пользователя, который ищет мероприятие") @RequestParam String authUser) {
-        return service.updatePartyVisibility(dto, authUser);
+    public PartyDto updatePartyVisibility(@Validated @RequestBody UpdateVisibilityDto dto) {
+        return service.updatePartyVisibility(dto);
     }
 
     @Operation(description = "Удаление мероприятия")
     @DeleteMapping("/{id}")
-    public void deleteParty(@Parameter(description = "Id мероприятия", required = true) @PathVariable Long id,
-                            @Parameter(description = "id пользователя, который ищет мероприятие") @RequestParam String authUser) {
-        service.deleteParty(id, authUser);
+    public void deleteParty(@Parameter(description = "Id мероприятия", required = true) @PathVariable Long id) {
+        service.deleteParty(id);
     }
 }

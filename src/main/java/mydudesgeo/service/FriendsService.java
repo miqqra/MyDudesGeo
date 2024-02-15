@@ -19,7 +19,9 @@ public class FriendsService {
 
     private final FriendMapper mapper;
 
-    public FriendsDto getFriends(String visibility, String authUser) {
+    public FriendsDto getFriends(String visibility) {
+        String authUser = UserContextService.getCurrentUser();
+
         return Optional.of(visibility)
                 .map(this::validateVisibility)
                 .map(v -> dataService.getFriends(v, authUser))
@@ -27,37 +29,41 @@ public class FriendsService {
                 .orElseThrow(() -> ClientException.of(HttpStatus.NOT_FOUND, "Не удалось получить список друзей"));
     }
 
-    public FriendsDto addFriend(String visibility, String authUser, String friend) {
-        Visibility visibilityValue = Optional.of(visibility)
-                .map(this::validateVisibility)
-                .orElse(null);
+    public FriendsDto addFriend(Visibility visibility, String friend) {
+        String authUser = UserContextService.getCurrentUser();
 
-        if (dataService.friendExists(visibilityValue, authUser, friend)) {
-            throw ClientException.of(HttpStatus.BAD_REQUEST, "Пользователь уже добавлен в категорию друзей");
-        }
+        validateIfFriendNotExistInFriendList(visibility, authUser, friend);
 
-        return Optional.of(visibilityValue)
+        return Optional.of(visibility)
                 .map(v -> dataService.addFriend(v, authUser, friend))
                 .map(mapper::toDto)
                 .orElseThrow(() -> ClientException.of(HttpStatus.NOT_FOUND, "Не удалось добавить друга"));
     }
 
-    public void deleteFriend(String visibility, String authUser, String friend) {
-        Visibility visibilityValue = Optional.of(visibility)
-                .map(this::validateVisibility)
-                .orElse(null);
+    public void deleteFriend(Visibility visibility, String friend) {
+        String authUser = UserContextService.getCurrentUser();
 
-        if (!dataService.friendExists(visibilityValue, authUser, friend)) {
-            throw ClientException.of(HttpStatus.BAD_REQUEST, "Такого пользователя нет в категории друзей");
-        }
+        validateIfFriendExistsInFriendList(visibility, authUser, friend);
 
-        dataService.deleteFriend(visibilityValue, authUser, friend);
+        dataService.deleteFriend(visibility, authUser, friend);
     }
 
     private Visibility validateVisibility(String visibility) {
         return Optional.of(visibility)
-                .map(Visibility::getEnum)
+                .map(Visibility::valueOf)
                 .orElseThrow(() -> ClientException.of(HttpStatus.BAD_REQUEST,
                         "Некорректное значение категории друзей"));
+    }
+
+    private void validateIfFriendExistsInFriendList(Visibility visibility, String user, String friend) {
+        if (!dataService.friendExists(visibility, user, friend)) {
+            throw ClientException.of(HttpStatus.BAD_REQUEST, "Такого пользователя нет в категории друзей");
+        }
+    }
+
+    private void validateIfFriendNotExistInFriendList(Visibility visibility, String user, String friend) {
+        if (dataService.friendExists(visibility, user, friend)) {
+            throw ClientException.of(HttpStatus.BAD_REQUEST, "Пользователь уже добавлен в категорию друзей");
+        }
     }
 }
