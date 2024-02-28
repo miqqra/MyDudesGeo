@@ -2,7 +2,7 @@ package mydudesgeo.dto.party;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import mydudesgeo.data.Point;
+import mydudesgeo.common.Location;
 import mydudesgeo.data.Visibility;
 
 import java.time.ZonedDateTime;
@@ -20,7 +20,7 @@ public class PartyDto {
     @Schema(description = "Категория мероприятия")
     private String category;
     @Schema(description = "локация мероприятия")
-    private Point location;
+    private Location location;
     @Schema(description = "id организатора")
     private String creator;
     @Schema(description = "список участников")

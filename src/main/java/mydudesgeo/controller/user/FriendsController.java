@@ -3,6 +3,7 @@ package mydudesgeo.controller.user;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
+import mydudesgeo.data.Visibility;
 import mydudesgeo.dto.friend.FriendsDto;
 import mydudesgeo.service.FriendsService;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,31 +28,30 @@ public class FriendsController {
     @Operation(description = "Получения списка друзей из определенной категории видимости")
     @GetMapping("/{visibility}")
     public FriendsDto getFriends(
-            @Parameter(description = "Категория видимости") @PathVariable String visibility,
-            @Parameter(description = "id авторизованного пользователя") @RequestParam String authUser
+            @Parameter(description = "Категория видимости") @PathVariable String visibility
     ) {
-        return service.getFriends(visibility, authUser);
+        return service.getFriends(visibility);
     }
 
-
+    //todo check for having person in friendlist
+    //todo поменять, категория будет только близких друзей, с валидацией
     @Operation(description = "Добавление нового друга в категорию друзей")
     @PostMapping("/{visibility}")
     public FriendsDto addFriend(
-            @Parameter(description = "Категория видимости") @PathVariable String visibility,
-            @Parameter(description = "id авторизованного пользователя") @RequestParam String authUser,
+            @Parameter(description = "Категория видимости") @PathVariable Visibility visibility,
             @Parameter(description = "id пользователя, которого нужно добавить в категорию друзей") @RequestParam String friend
     ) {
-        return service.addFriend(visibility, authUser, friend);
+        return service.addFriend(visibility, friend);
     }
 
+    //todo check for having person in friendlist
     @Operation(description = "Удаление человека из категории друзей")
     @DeleteMapping("/{visibility}")
     public void deleteFriend(
-            @Parameter(description = "Категория видимости") @PathVariable String visibility,
-            @Parameter(description = "id авторизованного пользователя") @RequestParam String authUser,
+            @Parameter(description = "Категория видимости") @PathVariable Visibility visibility,
             @Parameter(description = "id пользователя, которого нужно добавить в категорию друзей") @RequestParam String friend
     ) {
-        service.deleteFriend(visibility, authUser, friend);
+        service.deleteFriend(visibility, friend);
     }
 
 

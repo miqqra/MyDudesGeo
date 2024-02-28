@@ -12,4 +12,6 @@ public class AdminPartyController {
 
     private final PartyService service;
 
+    //todo
+
 }

@@ -3,7 +3,7 @@ package mydudesgeo.controller.user;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
-import mydudesgeo.data.Point;
+import mydudesgeo.common.Location;
 import mydudesgeo.dto.user.UserDto;
 import mydudesgeo.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +24,7 @@ public class UserController {
     @PutMapping("/{user}/location")
     @Operation(description = "Обновление локации пользователя")
     public void updateLocation(@Parameter(description = "Id пользователя") @PathVariable String user,
-                               @RequestBody Point location) {
+                               @RequestBody Location location) {
         service.updateLocation(user, location);
     }
 
