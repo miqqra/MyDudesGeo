@@ -3,6 +3,7 @@ package mydudesgeo.mapper;
 import mydudesgeo.dto.party.CreatePartyDto;
 import mydudesgeo.dto.party.PartyDto;
 import mydudesgeo.dto.party.PartyLocationDto;
+import mydudesgeo.dto.party.UpdatePartyDto;
 import mydudesgeo.entity.Party;
 import mydudesgeo.model.PartyModel;
 import org.mapstruct.AfterMapping;
@@ -13,7 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Collections;
 
-@Mapper
+@Mapper(uses = {GeographyMapper.class})
 public abstract class PartyMapper {
 
     @Value("${mydudes.config.limit:0}")
@@ -22,6 +23,8 @@ public abstract class PartyMapper {
     public abstract PartyModel toModel(Party source);
 
     public abstract Party toEntity(PartyModel source);
+
+    public abstract Party toEntity(@MappingTarget Party target, UpdatePartyDto dto);
 
     public abstract PartyDto toDto(PartyModel source);
 

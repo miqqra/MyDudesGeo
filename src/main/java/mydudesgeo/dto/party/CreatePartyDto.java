@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import mydudesgeo.data.Point;
+import mydudesgeo.common.Location;
 import mydudesgeo.data.Visibility;
 
 import java.time.ZonedDateTime;
@@ -27,7 +27,7 @@ public class CreatePartyDto {
 
     @NotNull
     @Schema(description = "Локация мероприятия")
-    private Point location;
+    private Location location;
 
     @NotBlank
     @Schema(description = "Id организатора")

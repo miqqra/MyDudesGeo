@@ -3,13 +3,12 @@ package mydudesgeo.controller.user;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
-import mydudesgeo.data.Point;
+import mydudesgeo.common.Location;
 import mydudesgeo.dto.party.CreatePartyDto;
 import mydudesgeo.dto.party.PartyDto;
 import mydudesgeo.dto.party.PartyLocationDto;
 import mydudesgeo.dto.party.UpdatePartyDto;
 import mydudesgeo.dto.party.UpdateVisibilityDto;
-import mydudesgeo.service.PartyCategoryService;
 import mydudesgeo.service.PartyService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,8 +33,8 @@ public class UserPartyController {
     @Operation(description = "Получение информации обо всех мероприятиях в радиусе r километров")
     @PostMapping("/around")
     public List<PartyLocationDto> getParties(
-            @Parameter(description = "Радиус, в котором будут искаться меропрятия", required = true) @RequestParam Integer r,
-            @RequestBody Point point) {
+            @Parameter(description = "Радиус, в котором будут искаться меропрятия", required = true) @RequestParam Double r,
+            @RequestBody Location point) {
         return service.getPartiesAround(r, point);
     }
 

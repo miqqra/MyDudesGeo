@@ -30,6 +30,9 @@ public abstract class PartyRoleMapper {
     public abstract List<PartyRoleDto> toDto(List<PartyRoleModel> source);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "name", source = "source.name")
+    @Mapping(target = "description", source = "source.description")
+    @Mapping(target = "party", source = "party")
     public abstract PartyRoleModel toModel(CreatePartyRoleDto source, PartyModel party);
 
     @Mapping(target = "id", ignore = true)

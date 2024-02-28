@@ -1,7 +1,7 @@
 package mydudesgeo.service;
 
 import lombok.RequiredArgsConstructor;
-import mydudesgeo.data.Point;
+import mydudesgeo.common.Location;
 import mydudesgeo.dataservice.UserDataService;
 import mydudesgeo.dto.user.UserDto;
 import mydudesgeo.exception.ClientException;
@@ -19,7 +19,7 @@ public class UserService {
 
     private final UserMapper mapper;
 
-    public void updateLocation(String name, Point newLocation) {
+    public void updateLocation(String name, Location newLocation) {
         if (!dataService.existsByName(name)) {
             dataService.createUser(name, newLocation);
         }

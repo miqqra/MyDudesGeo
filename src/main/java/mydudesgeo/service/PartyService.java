@@ -1,7 +1,7 @@
 package mydudesgeo.service;
 
 import lombok.RequiredArgsConstructor;
-import mydudesgeo.data.Point;
+import mydudesgeo.common.Location;
 import mydudesgeo.data.Visibility;
 import mydudesgeo.dataservice.FriendsDataService;
 import mydudesgeo.dataservice.PartyDataService;
@@ -29,11 +29,11 @@ public class PartyService {
 
     private final PartyMapper mapper;
 
-    public List<PartyLocationDto> getPartiesAround(Integer radius, Point location) {
+    public List<PartyLocationDto> getPartiesAround(Double radius, Location location) {
         String authUser = UserContextService.getCurrentUser();
 
         return Optional.of(radius)
-                .map(r -> dataService.getPartiesAround(r, location))
+                .map(r -> dataService.getPartiesAround(location, r))
                 .stream()
                 .flatMap(Collection::stream)
                 .filter(v -> friendsDataService.filterUsers(v, authUser))

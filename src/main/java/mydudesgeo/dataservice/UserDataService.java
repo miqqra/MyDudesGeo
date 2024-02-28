@@ -1,14 +1,13 @@
 package mydudesgeo.dataservice;
 
 import lombok.RequiredArgsConstructor;
-import mydudesgeo.data.Point;
+import mydudesgeo.common.Location;
 import mydudesgeo.mapper.UserMapper;
 import mydudesgeo.model.UserModel;
 import mydudesgeo.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.ZonedDateTime;
 import java.util.Optional;
 
 @Service
@@ -25,23 +24,18 @@ public class UserDataService {
     }
 
     @Transactional
-    public void createUser(String name, Point location) {
+    public void createUser(String name, Location location) {
         Optional.of(name)
-                .map(nam -> new UserModel()
-                        .setName(name)
-                        .setLocation(location)
-                        .setTime(ZonedDateTime.now())
-                        .setFreeze(false))
-                .map(mapper::toEntity)
+                .map(n -> mapper.toEntity(n, location))
                 .map(repository::save)
                 .map(mapper::toModel);
     }
 
     @Transactional
-    public UserModel updateLocation(String name, Point location) {
+    public UserModel updateLocation(String name, Location location) {
         return Optional.of(name)
                 .map(repository::getUserByName)
-                .map(user -> user.setLocation(location))
+                .map(user -> mapper.updateLocation(user, location))
                 .map(repository::save)
                 .map(mapper::toModel)
                 .orElse(null);

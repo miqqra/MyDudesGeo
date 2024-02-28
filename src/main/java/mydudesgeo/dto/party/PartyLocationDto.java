@@ -2,7 +2,7 @@ package mydudesgeo.dto.party;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import mydudesgeo.data.Point;
+import mydudesgeo.common.Location;
 
 @Data
 public class PartyLocationDto {
@@ -10,5 +10,5 @@ public class PartyLocationDto {
     @Schema(description = "Идентификатор мероприятия")
     private Long id;
     @Schema(description = "Локация мероприятия")
-    private Point location;
+    private Location location;
 }
