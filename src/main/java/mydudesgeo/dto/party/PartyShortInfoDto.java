@@ -5,10 +5,17 @@ import lombok.Data;
 import mydudesgeo.common.Location;
 
 @Data
-public class PartyLocationDto {
+public class PartyShortInfoDto {
 
     @Schema(description = "Идентификатор мероприятия")
     private Long id;
+
+    @Schema(description = "Название мероприятия")
+    private String name;
+
+    @Schema(description = "Время начала и конца мероприятия")
+    private PartyTimeInfoDto time;
+
     @Schema(description = "Локация мероприятия")
     private Location location;
 }

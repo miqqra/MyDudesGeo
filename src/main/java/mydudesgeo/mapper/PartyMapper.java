@@ -2,7 +2,7 @@ package mydudesgeo.mapper;
 
 import mydudesgeo.dto.party.CreatePartyDto;
 import mydudesgeo.dto.party.PartyDto;
-import mydudesgeo.dto.party.PartyLocationDto;
+import mydudesgeo.dto.party.PartyShortInfoDto;
 import mydudesgeo.dto.party.UpdatePartyDto;
 import mydudesgeo.entity.Party;
 import mydudesgeo.model.PartyModel;
@@ -28,7 +28,7 @@ public abstract class PartyMapper {
 
     public abstract PartyDto toDto(PartyModel source);
 
-    public abstract PartyLocationDto toLocationDto(PartyModel source);
+    public abstract PartyShortInfoDto toShortInfoDto(PartyModel source);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "participants", ignore = true)

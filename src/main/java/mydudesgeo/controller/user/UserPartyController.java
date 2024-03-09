@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import mydudesgeo.common.Location;
 import mydudesgeo.dto.party.CreatePartyDto;
 import mydudesgeo.dto.party.PartyDto;
-import mydudesgeo.dto.party.PartyLocationDto;
+import mydudesgeo.dto.party.PartyShortInfoDto;
 import mydudesgeo.dto.party.UpdatePartyDto;
 import mydudesgeo.dto.party.UpdateVisibilityDto;
 import mydudesgeo.service.PartyService;
@@ -32,10 +32,16 @@ public class UserPartyController {
 
     @Operation(description = "Получение информации обо всех мероприятиях в радиусе r километров")
     @PostMapping("/around")
-    public List<PartyLocationDto> getParties(
+    public List<PartyShortInfoDto> getParties(
             @Parameter(description = "Радиус, в котором будут искаться меропрятия", required = true) @RequestParam Double r,
             @RequestBody Location point) {
         return service.getPartiesAround(r, point);
+    }
+
+    @Operation(description = "Поиск мероприятий по названия мероприятия или по организатору")
+    @GetMapping("/find")
+    public List<PartyShortInfoDto> findParties(@Parameter(description = "Поле для поиска") @RequestParam String search) {
+        return service.findParties(search);
     }
 
     @Operation(description = "Создание мероприятия")

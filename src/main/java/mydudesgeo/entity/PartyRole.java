@@ -46,6 +46,6 @@ public class PartyRole {
     @JoinTable(name = "geo_party_roles_to_users",
             joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "username", referencedColumnName = "name")
-    )
+    ) //todo fix
     private Set<User> users;
 }

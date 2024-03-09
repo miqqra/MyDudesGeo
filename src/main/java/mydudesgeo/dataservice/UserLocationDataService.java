@@ -2,7 +2,7 @@ package mydudesgeo.dataservice;
 
 import lombok.RequiredArgsConstructor;
 import mydudesgeo.common.Location;
-import mydudesgeo.mapper.UserMapper;
+import mydudesgeo.mapper.UserLocationMapper;
 import mydudesgeo.model.UserModel;
 import mydudesgeo.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -12,11 +12,11 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserDataService {
+public class UserLocationDataService {
 
     private final UserRepository repository;
 
-    private final UserMapper mapper;
+    private final UserLocationMapper mapper;
 
     @Transactional(readOnly = true)
     public boolean existsByName(String name) {

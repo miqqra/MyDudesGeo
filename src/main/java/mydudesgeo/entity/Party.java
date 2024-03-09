@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
@@ -44,19 +45,21 @@ public class Party {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "category")
-    private String category;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category", referencedColumnName = "category")
+    private PartyCategory category;
 
     @Column(name = "location")
     @JdbcTypeCode(SqlTypes.JSON)
     private Point location;
 
-    //todo fk on geo_users
-    @Column(name = "creator")
-    private String creator;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "creator", referencedColumnName = "nickname")
+    private User creator;
 
     @Column(name = "participants")
     @JdbcTypeCode(SqlTypes.JSON)
+    //todo fk on geo_users
     private List<String> participants;
 
     @Column(name = "limits")

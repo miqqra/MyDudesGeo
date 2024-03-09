@@ -1,42 +1,24 @@
 package mydudesgeo.service;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import mydudesgeo.common.Location;
-import mydudesgeo.dataservice.UserDataService;
-import mydudesgeo.dto.user.UserDto;
-import mydudesgeo.exception.ClientException;
-import mydudesgeo.mapper.UserMapper;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserDataService dataService;
+    @GetMapping
+    @Operation(description = "Получение информации пользователя")
+    public void getInfo() {
 
-    private final UserMapper mapper;
-
-    public void updateLocation(String name, Location newLocation) {
-        if (!dataService.existsByName(name)) {
-            dataService.createUser(name, newLocation);
-        }
-
-        Optional.of(name)
-                .map(userName -> dataService.updateLocation(userName, newLocation))
-                .orElseThrow(() -> ClientException.of(HttpStatus.NOT_FOUND, "Такого пользователя не существует"));
     }
 
-    public UserDto getLocation(String user) {
-        return Optional.of(user)
-                .map(dataService::getLocation)
-                .map(mapper::toDto)
-                .orElse(null);
-    }
+    @PutMapping
+    @Operation(description = "Редактирование информации пользователя")
+    public void updateInfo() {
 
-    public void changeFreezeToggle(String name, Boolean freeze) {
-        dataService.changeFreezeToggle(name, freeze);
     }
 }

@@ -7,7 +7,7 @@ import mydudesgeo.dataservice.FriendsDataService;
 import mydudesgeo.dataservice.PartyDataService;
 import mydudesgeo.dto.party.CreatePartyDto;
 import mydudesgeo.dto.party.PartyDto;
-import mydudesgeo.dto.party.PartyLocationDto;
+import mydudesgeo.dto.party.PartyShortInfoDto;
 import mydudesgeo.dto.party.UpdatePartyDto;
 import mydudesgeo.dto.party.UpdateVisibilityDto;
 import mydudesgeo.exception.ClientException;
@@ -29,7 +29,7 @@ public class PartyService {
 
     private final PartyMapper mapper;
 
-    public List<PartyLocationDto> getPartiesAround(Double radius, Location location) {
+    public List<PartyShortInfoDto> getPartiesAround(Double radius, Location location) {
         String authUser = UserContextService.getCurrentUser();
 
         return Optional.of(radius)
@@ -37,7 +37,7 @@ public class PartyService {
                 .stream()
                 .flatMap(Collection::stream)
                 .filter(v -> friendsDataService.filterUsers(v, authUser))
-                .map(mapper::toLocationDto)
+                .map(mapper::toShortInfoDto)
                 .toList();
     }
 
@@ -60,6 +60,17 @@ public class PartyService {
                 .flatMap(Collection::stream)
                 .filter(v -> friendsDataService.filterUsers(v, authUser))
                 .map(mapper::toDto)
+                .toList();
+    }
+
+    public List<PartyShortInfoDto> findParties(String search) {
+        //todo add filter
+
+        return Optional.of(search)
+                .map(dataService::searchParties)
+                .stream()
+                .flatMap(Collection::stream)
+                .map(mapper::toShortInfoDto)
                 .toList();
     }
 

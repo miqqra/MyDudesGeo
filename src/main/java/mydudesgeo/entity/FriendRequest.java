@@ -5,9 +5,12 @@ import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -29,11 +32,13 @@ public class FriendRequest {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "request_from")
-    private String requestFrom;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "request_from", referencedColumnName = "nickname")
+    private User requestFrom;
 
-    @Column(name = "request_to")
-    private String requestTo;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "request_to", referencedColumnName = "nickname")
+    private User requestTo;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)

@@ -57,6 +57,16 @@ public class PartyDataService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    public List<PartyModel> searchParties(String search) {
+        return Optional.of(search)
+                .map(repository::searchPartiesByCreatorOrName)
+                .stream()
+                .flatMap(Collection::stream)
+                .map(mapper::toModel)
+                .toList();
+    }
+
     @Transactional
     public PartyModel createParty(PartyModel party) {
         return Optional.of(party)

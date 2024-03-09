@@ -2,7 +2,7 @@ package mydudesgeo.dataservice;
 
 import lombok.RequiredArgsConstructor;
 import mydudesgeo.entity.PartyRole;
-import mydudesgeo.entity.User;
+import mydudesgeo.entity.UserLocation;
 import mydudesgeo.mapper.PartyRoleMapper;
 import mydudesgeo.model.PartyRoleModel;
 import mydudesgeo.repository.PartyRoleRepository;
@@ -56,8 +56,9 @@ public class PartyRoleDataService {
 
     @Transactional
     public void addUserToRole(Long roleId, String username) {
-        User user = userRepository.getUserByName(username);
+        UserLocation user = userRepository.getUserByName(username);
 
+        //todo fix
         Optional.of(roleId)
                 .flatMap(repository::findById)
                 .map(v -> {
@@ -69,7 +70,7 @@ public class PartyRoleDataService {
 
     @Transactional
     public void deleteUserFromRole(Long roleId, String username) {
-        User user = userRepository.getUserByName(username);
+        UserLocation user = userRepository.getUserByName(username);
 
         Optional.of(roleId)
                 .flatMap(repository::findById)
@@ -87,7 +88,7 @@ public class PartyRoleDataService {
                 .map(PartyRole::getUsers)
                 .stream()
                 .flatMap(Collection::stream)
-                .map(User::getName)
+                .map(UserLocation::getName)
                 .toList();
     }
 }
