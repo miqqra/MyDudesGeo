@@ -6,7 +6,7 @@ import mydudesgeo.entity.UserLocation;
 import mydudesgeo.mapper.PartyRoleMapper;
 import mydudesgeo.model.PartyRoleModel;
 import mydudesgeo.repository.PartyRoleRepository;
-import mydudesgeo.repository.UserRepository;
+import mydudesgeo.repository.UserLocationRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +20,7 @@ public class PartyRoleDataService {
 
     private final PartyRoleRepository repository;
 
-    private final UserRepository userRepository;
+    private final UserLocationRepository userRepository;
 
     private final PartyRoleMapper mapper;
 
@@ -35,7 +35,7 @@ public class PartyRoleDataService {
     @Transactional(readOnly = true)
     public List<PartyRoleModel> findAllByParty(Long partyId) {
         return Optional.of(partyId)
-                .map(repository::findByParty)
+                .map(repository::findByPartyId)
                 .map(mapper::toModel)
                 .orElse(null);
     }
@@ -88,7 +88,7 @@ public class PartyRoleDataService {
                 .map(PartyRole::getUsers)
                 .stream()
                 .flatMap(Collection::stream)
-                .map(UserLocation::getName)
+                .map(UserLocation::getName) //todo
                 .toList();
     }
 }

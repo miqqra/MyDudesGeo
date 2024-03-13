@@ -38,9 +38,6 @@ public class UserLocation {
     @JoinColumn(name = "nickname", referencedColumnName = "nickname")
     private User user;
 
-    @Column(name = "nickname")
-    private String nickname;
-
     @Column(name = "location")
     @JdbcTypeCode(SqlTypes.JSON)
     private Point location;

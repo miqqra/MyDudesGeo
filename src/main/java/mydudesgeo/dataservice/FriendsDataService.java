@@ -77,9 +77,9 @@ public class FriendsDataService {
     private boolean existsByPersonAndFriend(Visibility visibility, String person, String friend) {
         return switch (visibility) {
             case FRIENDS ->
-                    friendsRepository.existsByFriendAndPerson(friend, person);
+                    friendsRepository.existsByFriendNicknameAndPersonNickname(friend, person);
             case CLOSE_FRIENDS ->
-                    closeFriendsRepository.existsByFriendAndPerson(friend, person);
+                    closeFriendsRepository.existsByFriendNicknameAndPersonNickname(friend, person);
             case ALL -> true;
         };
     }
@@ -87,9 +87,9 @@ public class FriendsDataService {
     private FriendModel getAll(Visibility visibility, String person) {
         return switch (visibility) {
             case FRIENDS ->
-                    mapper.toModelFriends(friendsRepository.findAllByPerson(person), person, visibility);
+                    mapper.toModelFriends(friendsRepository.findByPersonNickname(person), person, visibility);
             case CLOSE_FRIENDS ->
-                    mapper.toModelCloseFriends(closeFriendsRepository.findAllByPerson(person), person, visibility);
+                    mapper.toModelCloseFriends(closeFriendsRepository.findByPersonNickname(person), person, visibility);
             case ALL -> FriendModel.emptyFriendList(visibility, person);
         };
     }
@@ -97,9 +97,9 @@ public class FriendsDataService {
     private void deleteByPersonAndFriend(Visibility visibility, String person, String friend) {
         switch (visibility) {
             case FRIENDS ->
-                    friendsRepository.deleteByPersonAndFriend(person, friend);
+                    friendsRepository.deleteByPersonNicknameAndFriendNickname(person, friend);
             case CLOSE_FRIENDS ->
-                    closeFriendsRepository.deleteByPersonAndFriend(person, friend);
+                    closeFriendsRepository.deleteByPersonNicknameAndFriendNickname(person, friend);
             case ALL -> {
             }
         }

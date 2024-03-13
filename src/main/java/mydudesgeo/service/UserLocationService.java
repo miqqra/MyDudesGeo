@@ -3,7 +3,7 @@ package mydudesgeo.service;
 import lombok.RequiredArgsConstructor;
 import mydudesgeo.common.Location;
 import mydudesgeo.dataservice.UserLocationDataService;
-import mydudesgeo.dto.user.UserDto;
+import mydudesgeo.dto.user.UserLocationDto;
 import mydudesgeo.exception.ClientException;
 import mydudesgeo.mapper.UserLocationMapper;
 import org.springframework.http.HttpStatus;
@@ -29,13 +29,14 @@ public class UserLocationService {
                 .orElseThrow(() -> ClientException.of(HttpStatus.NOT_FOUND, "Такого пользователя не существует"));
     }
 
-    public UserDto getLocation(String user) {
+    public UserLocationDto getLocation(String user) {
         return Optional.of(user)
                 .map(dataService::getLocation)
                 .map(mapper::toDto)
                 .orElse(null);
     }
 
+    //todo move to userService
     public void changeFreezeToggle(String name, Boolean freeze) {
         dataService.changeFreezeToggle(name, freeze);
     }

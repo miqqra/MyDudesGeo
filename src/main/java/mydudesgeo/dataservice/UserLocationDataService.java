@@ -3,8 +3,8 @@ package mydudesgeo.dataservice;
 import lombok.RequiredArgsConstructor;
 import mydudesgeo.common.Location;
 import mydudesgeo.mapper.UserLocationMapper;
-import mydudesgeo.model.UserModel;
-import mydudesgeo.repository.UserRepository;
+import mydudesgeo.model.UserLocationModel;
+import mydudesgeo.repository.UserLocationRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +14,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserLocationDataService {
 
-    private final UserRepository repository;
+    private final UserLocationRepository repository;
 
     private final UserLocationMapper mapper;
 
@@ -32,7 +32,7 @@ public class UserLocationDataService {
     }
 
     @Transactional
-    public UserModel updateLocation(String name, Location location) {
+    public UserLocationModel updateLocation(String name, Location location) {
         return Optional.of(name)
                 .map(repository::getUserByName)
                 .map(user -> mapper.updateLocation(user, location))
@@ -42,7 +42,7 @@ public class UserLocationDataService {
     }
 
     @Transactional(readOnly = true)
-    public UserModel getLocation(String user) {
+    public UserLocationModel getLocation(String user) {
         return Optional.of(user)
                 .map(repository::getUserByName)
                 .map(mapper::toModel)

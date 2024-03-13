@@ -8,14 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Data
-@Schema(description = "Профиль пользователя")
-public class UserDto {
-
-    @Schema(description = "Id пользователя")
-    private Long id;
-
-    @Schema(description = "Никнейм")
-    private String nickname;
+public class UpdateUserInfoDto {
 
     @Schema(description = "Имя")
     private String firstName;
@@ -40,4 +33,5 @@ public class UserDto {
 
     @Schema(description = "Увлечения")
     private List<Hobby> hobbies;
+
 }

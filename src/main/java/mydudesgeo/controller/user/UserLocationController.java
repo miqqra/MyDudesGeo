@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import mydudesgeo.common.Location;
-import mydudesgeo.dto.user.UserDto;
+import mydudesgeo.dto.user.UserLocationDto;
 import mydudesgeo.service.UserLocationService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,7 +30,7 @@ public class UserLocationController {
 
     @GetMapping
     @Operation(description = "Получение локации пользователя")
-    public UserDto getLocation(@Parameter(description = "Id пользователя") @PathVariable String user) {
+    public UserLocationDto getLocation(@Parameter(description = "Id пользователя") @PathVariable String user) {
         return service.getLocation(user);
         //todo checkvisibility
         //todo filter by freeze

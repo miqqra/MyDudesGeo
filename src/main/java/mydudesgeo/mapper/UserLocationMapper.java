@@ -1,9 +1,9 @@
 package mydudesgeo.mapper;
 
 import mydudesgeo.common.Location;
-import mydudesgeo.dto.user.UserDto;
+import mydudesgeo.dto.user.UserLocationDto;
 import mydudesgeo.entity.UserLocation;
-import mydudesgeo.model.UserModel;
+import mydudesgeo.model.UserLocationModel;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -14,11 +14,11 @@ import java.time.ZonedDateTime;
 @Mapper(uses = {GeographyMapper.class})
 public abstract class UserLocationMapper {
 
-    public abstract UserModel toModel(UserLocation source);
+    public abstract UserLocationModel toModel(UserLocation source);
 
-    public abstract UserLocation toEntity(UserModel source);
+    public abstract UserLocation toEntity(UserLocationModel source);
 
-    public abstract UserDto toDto(UserModel source);
+    public abstract UserLocationDto toDto(UserLocationModel source);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "time", ignore = true)

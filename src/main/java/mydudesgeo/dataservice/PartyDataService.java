@@ -50,7 +50,7 @@ public class PartyDataService {
     @Transactional(readOnly = true)
     public List<PartyModel> getUserParties(String user) {
         return Optional.ofNullable(user)
-                .map(repository::findAllByCreator)
+                .map(repository::findByCreatorNickname)
                 .stream()
                 .flatMap(Collection::stream)
                 .map(mapper::toModel)
