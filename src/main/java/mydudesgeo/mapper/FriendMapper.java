@@ -5,33 +5,50 @@ import mydudesgeo.dto.friend.FriendsDto;
 import mydudesgeo.entity.friends.CloseFriends;
 import mydudesgeo.entity.friends.Friends;
 import mydudesgeo.model.FriendModel;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
+import org.mapstruct.MappingTarget;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-@Mapper
+@Mapper(uses = {
+        UserMapper.class
+})
 public abstract class FriendMapper {
 
+    @Autowired
+    private UserMapper userMapper;
+
+    @Mapping(target = "person.nickname", source = "person")
+    @Mapping(target = "friend.nickname", source = "friend")
     public abstract CloseFriends toEntityCloseFriends(String person, String friend);
 
+    @Mapping(target = "person.nickname", source = "person")
+    @Mapping(target = "friend.nickname", source = "friend")
     public abstract Friends toEntityFriends(String person, String friend);
 
-    @Mapping(target = "friends", source = "source", qualifiedByName = "mapFriends")
+    @Mapping(target = "person", ignore = true)
     public abstract FriendModel toModelFriends(List<Friends> source, String person, Visibility visibility);
 
-    @Mapping(target = "friends", source = "source", qualifiedByName = "mapCloseFriends")
-    public abstract FriendModel toModelCloseFriends(List<CloseFriends> source, String person, Visibility visibility);
-
-    @Named("mapFriends")
-    protected List<String> mapFriends(List<Friends> source) {
-        return source.stream().map(Friends::getFriend).toList();
+    @AfterMapping
+    protected void postMap(@MappingTarget FriendModel target, List<Friends> source, Visibility visibility) {
+        target.setPerson(userMapper.toModel(
+                source.isEmpty()
+                        ? null
+                        : source.getFirst().getPerson()));
     }
 
-    @Named("mapCloseFriends")
-    protected List<String> mapCloseFriends(List<CloseFriends> source) {
-        return source.stream().map(CloseFriends::getFriend).toList();
+    @Mapping(target = "person", ignore = true)
+    public abstract FriendModel toModelCloseFriends(List<CloseFriends> source, String person, Visibility visibility);
+
+    @AfterMapping
+    protected void postMapCloseFriends(@MappingTarget FriendModel target, List<CloseFriends> source, Visibility visibility) {
+        target.setPerson(userMapper.toModel(
+                source.isEmpty()
+                        ? null
+                        : source.getFirst().getPerson()));
     }
 
     public abstract FriendsDto toDto(FriendModel source);

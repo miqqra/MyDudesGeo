@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import mydudesgeo.common.Location;
 import mydudesgeo.data.Visibility;
+import mydudesgeo.dto.user.UserDto;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -22,7 +23,7 @@ public class PartyDto {
     @Schema(description = "локация мероприятия")
     private Location location;
     @Schema(description = "id организатора")
-    private String creator;
+    private UserDto creator;
     @Schema(description = "список участников")
     private List<String> participants;
     @Schema(description = "Ограничение по количеству человек")

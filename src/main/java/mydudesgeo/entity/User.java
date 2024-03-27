@@ -60,7 +60,7 @@ public class User {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "geo_users_to_hobbies",
-            joinColumns = @JoinColumn(name = "username"),
-            inverseJoinColumns = @JoinColumn(name = "hobby_name"))
+            joinColumns = @JoinColumn(name = "username", referencedColumnName = "nickname"),
+            inverseJoinColumns = @JoinColumn(name = "hobby_name", referencedColumnName = "name"))
     private List<Hobby> hobbies;
 }

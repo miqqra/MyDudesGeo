@@ -20,6 +20,7 @@ import mydudesgeo.entity.User;
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class CloseFriends extends FriendTemplate {
+    //todo change to many to many
 
     @Id
     @EqualsAndHashCode.Include

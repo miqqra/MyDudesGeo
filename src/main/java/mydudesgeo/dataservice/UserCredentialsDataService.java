@@ -22,6 +22,13 @@ public class UserCredentialsDataService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
+    public boolean existsByUsername(String username) {
+        return Optional.of(username)
+                .map(userCredentialsRepository::existsByUsername)
+                .orElse(true);
+    }
+
+    @Transactional(readOnly = true)
     public UserDetails findByUsername(String username) {
         return Optional.of(username)
                 .map(userCredentialsRepository::findByUsername)

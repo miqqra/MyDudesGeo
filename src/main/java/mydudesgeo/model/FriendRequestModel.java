@@ -7,7 +7,7 @@ import mydudesgeo.data.FriendRequestStatus;
 public class FriendRequestModel {
 
     private Long id;
-    private String requestFrom;
-    private String requestTo;
+    private UserModel requestFrom;
+    private UserModel requestTo;
     private FriendRequestStatus status;
 }

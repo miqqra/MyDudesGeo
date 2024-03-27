@@ -5,14 +5,16 @@ import mydudesgeo.model.FriendRequestModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper
+@Mapper(uses = {
+        UserMapper.class
+})
 public abstract class FriendRequestMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "requestTo", constant = "changeIt")
-    //todo change for current user
+    @Mapping(target = "requestFrom.nickname", source = "personFrom")
+    @Mapping(target = "requestTo.nickname", source = "personTo")
     @Mapping(target = "status", ignore = true)
-    public abstract FriendRequestModel toModel(String personFrom);
+    public abstract FriendRequestModel toModel(String personFrom, String personTo);
 
     public abstract FriendRequest toEntity(FriendRequestModel source);
 

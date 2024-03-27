@@ -1,0 +1,40 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "9097:9097"
+    depends_on:
+      - postgres
+  postgres:
+    image: "postgres:15"
+    container_name: postgres
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: always
+
+#  liquibase-migrations:
+#    image: liquibase/liquibase:4.24.0
+#    depends_on:
+#      - postgres
+#    command:
+#      - --changeLogFile=master.xml
+#      - --url=jdbc:postgresql://postgres:5432/postgres
+#      - --username=postgres
+#      - --password=postgres
+#      - update
+#    volumes:
+#      - ./src/main/resources/migrations/migrations/geo-1.xml:/liquibase/changelog/master.xml
+#    #      - ./src/main/resources/migrations:/liquibase/changelog
+#    working_dir: /liquibase/changelog
+
+volumes:
+  postgres-data:

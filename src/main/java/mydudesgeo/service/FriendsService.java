@@ -20,7 +20,7 @@ public class FriendsService {
     private final FriendMapper mapper;
 
     public FriendsDto getFriends(String visibility) {
-        String authUser = UserContextService.getCurrentUser();
+        String authUser = UserCredentialsService.getCurrentUser();
 
         return Optional.of(visibility)
                 .map(this::validateVisibility)
@@ -30,7 +30,7 @@ public class FriendsService {
     }
 
     public FriendsDto addFriend(Visibility visibility, String friend) {
-        String authUser = UserContextService.getCurrentUser();
+        String authUser = UserCredentialsService.getCurrentUser();
 
         validateIfFriendNotExistInFriendList(visibility, authUser, friend);
 
@@ -41,7 +41,7 @@ public class FriendsService {
     }
 
     public void deleteFriend(Visibility visibility, String friend) {
-        String authUser = UserContextService.getCurrentUser();
+        String authUser = UserCredentialsService.getCurrentUser();
 
         validateIfFriendExistsInFriendList(visibility, authUser, friend);
 

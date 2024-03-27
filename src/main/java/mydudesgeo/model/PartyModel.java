@@ -13,10 +13,10 @@ public class PartyModel {
     private Long id;
     private String name;
     private String description;
-    private String category;
+    private PartyCategoryModel category;
     private Location location;
-    private String creator;
-    private List<String> participants;
+    private UserModel creator;
+    private List<UserModel> participants;
     private Integer limits;
     private Visibility visibility;
     private ZonedDateTime startTime;

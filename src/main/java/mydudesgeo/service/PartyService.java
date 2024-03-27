@@ -30,7 +30,7 @@ public class PartyService {
     private final PartyMapper mapper;
 
     public List<PartyShortInfoDto> getPartiesAround(Double radius, Location location) {
-        String authUser = UserContextService.getCurrentUser();
+        String authUser = UserCredentialsService.getCurrentUser();
 
         return Optional.of(radius)
                 .map(r -> dataService.getPartiesAround(location, r))
@@ -42,7 +42,7 @@ public class PartyService {
     }
 
     public PartyDto getParty(Long id) {
-        String authUser = UserContextService.getCurrentUser();
+        String authUser = UserCredentialsService.getCurrentUser();
 
         return Optional.ofNullable(id)
                 .map(dataService::getParty)
@@ -52,7 +52,7 @@ public class PartyService {
     }
 
     public List<PartyDto> getUserParties(String user) {
-        String authUser = UserContextService.getCurrentUser();
+        String authUser = UserCredentialsService.getCurrentUser();
 
         return Optional.ofNullable(user)
                 .map(dataService::getUserParties)

@@ -2,11 +2,12 @@ package mydudesgeo.dataservice;
 
 import lombok.RequiredArgsConstructor;
 import mydudesgeo.entity.PartyRole;
-import mydudesgeo.entity.UserLocation;
+import mydudesgeo.entity.User;
 import mydudesgeo.mapper.PartyRoleMapper;
 import mydudesgeo.model.PartyRoleModel;
 import mydudesgeo.repository.PartyRoleRepository;
 import mydudesgeo.repository.UserLocationRepository;
+import mydudesgeo.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +21,8 @@ public class PartyRoleDataService {
 
     private final PartyRoleRepository repository;
 
-    private final UserLocationRepository userRepository;
+    private final UserRepository userRepository;
+    private final UserLocationRepository userLocationRepository;
 
     private final PartyRoleMapper mapper;
 
@@ -56,7 +58,7 @@ public class PartyRoleDataService {
 
     @Transactional
     public void addUserToRole(Long roleId, String username) {
-        UserLocation user = userRepository.getUserByName(username);
+        User user = userRepository.findByNickname(username);
 
         //todo fix
         Optional.of(roleId)
@@ -70,7 +72,7 @@ public class PartyRoleDataService {
 
     @Transactional
     public void deleteUserFromRole(Long roleId, String username) {
-        UserLocation user = userRepository.getUserByName(username);
+        User user = userRepository.findByNickname(username);
 
         Optional.of(roleId)
                 .flatMap(repository::findById)
@@ -88,7 +90,7 @@ public class PartyRoleDataService {
                 .map(PartyRole::getUsers)
                 .stream()
                 .flatMap(Collection::stream)
-                .map(UserLocation::getName) //todo
+                .map(User::getNickname)
                 .toList();
     }
 }

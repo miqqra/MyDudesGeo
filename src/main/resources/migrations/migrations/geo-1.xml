@@ -16,7 +16,7 @@
         <createTable tableName="geo_users_credentials">
             <column name="id" type="bigserial" remarks="Id записи"
                     autoIncrement="true">
-                <constraints nullable="false"/>
+                <constraints primaryKey="true"/>
             </column>
             <column name="username" type="text" remarks="Логин пользователя">
                 <constraints nullable="false" unique="true"/>
@@ -49,14 +49,11 @@
             <column name="lastname" type="text" remarks="Фамилия пользователя">
                 <constraints nullable="false"/>
             </column>
-            <column name="birthdate" type="date"
-                    remarks="Дата рождения пользователя"/>
+            <column name="birthdate" type="date" remarks="Дата рождения пользователя"/>
             <column name="sex" type="text" remarks="Пол пользователя">
-                <constraints nullable="false"/>
+                <!--                <constraints nullable="false"/>-->
             </column>
-            <column name="info" type="text" remarks="О себе">
-                <constraints/>
-            </column>
+            <column name="info" type="text" remarks="О себе"/>
             <column name="photo" type="blob" remarks="Фото пользователя"/>
             <column name="freeze_location" type="boolean"
                     remarks="Флаг заморозки локации пользователя"
@@ -274,7 +271,7 @@
 
 
     <changeSet id="9" author="krasnikov" context="schema">
-        <preConditions>
+        <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="geo_friend_requests"/>
             </not>
@@ -321,8 +318,8 @@
         </preConditions>
 
         <createTable tableName="geo_roles">
-            <column name="id" type="bigserial" remarks="Id записи">
-                <constraints nullable="false"/>
+            <column name="id" type="bigserial" remarks="Id записи" autoIncrement="true">
+                <constraints primaryKey="true"/>
             </column>
             <column name="name" type="text"
                     remarks="Название роли: удовлетворяет формату ROLE_*">
@@ -333,7 +330,7 @@
 
 
     <changeSet id="11" author="krasnikov" context="schema">
-        <preConditions>
+        <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="geo_users_to_roles"/>
             </not>
@@ -342,7 +339,7 @@
         <createTable tableName="geo_users_to_roles">
             <column name="id" type="bigserial" remarks="Id записи"
                     autoIncrement="true">
-                <constraints nullable="false"/>
+                <constraints primaryKey="true"/>
             </column>
             <column name="user_id" type="bigserial" remarks="Id пользователя">
                 <constraints nullable="false"/>
@@ -356,7 +353,7 @@
                 constraintName="fk-geo_users_to_roles-user_id-id"
                 baseTableName="geo_users_to_roles"
                 baseColumnNames="user_id"
-                referencedTableName="geo_users_credentials"
+                referencedTableName="geo_users"
                 referencedColumnNames="id"/>
         <addForeignKeyConstraint
                 constraintName="fk-geo_users_to_roles-role_id-id"
@@ -377,7 +374,7 @@
         <createTable tableName="geo_party_roles">
             <column name="id" type="bigserial" remarks="Id роли"
                     autoIncrement="true">
-                <constraints nullable="false"/>
+                <constraints primaryKey="true"/>
             </column>
             <column name="name" type="text" remarks="Название роли">
                 <constraints nullable="false"/>
@@ -402,15 +399,15 @@
 
 
     <changeSet id="13" author="krasnikov" context="schema">
-        <preConditions>
+        <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="geo_party_roles_to_users"/>
             </not>
         </preConditions>
 
         <createTable tableName="geo_party_roles_to_users">
-            <column name="id" type="bigserial" remarks="Id записи">
-                <constraints nullable="false"/>
+            <column name="id" type="bigserial" remarks="Id записи" autoIncrement="true">
+                <constraints primaryKey="true"/>
             </column>
             <column name="role_id" type="bigserial"
                     remarks="Id роли мероприятия">
@@ -422,31 +419,31 @@
         </createTable>
 
         <addForeignKeyConstraint
-                constraintName="geo_party_roles_to_user-role_id-id"
-                baseTableName="geo_party_roles_to_user"
+                constraintName="geo_party_roles_to_users-role_id-id"
+                baseTableName="geo_party_roles_to_users"
                 baseColumnNames="role_id"
                 referencedTableName="geo_party_roles"
                 referencedColumnNames="id"/>
         <addForeignKeyConstraint
-                constraintName="geo_party_roles_to_user-username-nickname"
-                baseTableName="geo_party_roles_to_user"
+                constraintName="geo_party_roles_to_users-username-nickname"
+                baseTableName="geo_party_roles_to_users"
                 baseColumnNames="username"
                 referencedTableName="geo_users"
                 referencedColumnNames="nickname"/>
     </changeSet>
 
     <changeSet id="14" author="krasnikov" context="schema">
-        <preConditions>
+        <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="geo_users_to_hobbies"/>
             </not>
         </preConditions>
 
         <createTable tableName="geo_users_to_hobbies">
-            <column name="id" type="bigserial" remarks="Id записи">
-                <constraints nullable="false"/>
+            <column name="id" type="bigserial" remarks="Id записи" autoIncrement="true">
+                <constraints primaryKey="true"/>
             </column>
-            <column name="hobby_name" type="bigserial"
+            <column name="hobby_name" type="text"
                     remarks="Id роли мероприятия">
                 <constraints nullable="false"/>
             </column>
@@ -464,6 +461,40 @@
         <addForeignKeyConstraint
                 constraintName="geo_users_to_hobbies-username-nickname"
                 baseTableName="geo_users_to_hobbies"
+                baseColumnNames="username"
+                referencedTableName="geo_users"
+                referencedColumnNames="nickname"/>
+    </changeSet>
+
+    <changeSet id="15" author="krasnikov" context="schema">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="geo_users_to_parties"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="geo_users_to_parties">
+            <column name="id" type="bigserial" remarks="Id записи" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="party_id" type="bigserial"
+                    remarks="Id мероприятия">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" type="text" remarks="Логин пользователя - участника мероприятия">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                constraintName="geo_users_to_parties-party_id-id"
+                baseTableName="geo_users_to_parties"
+                baseColumnNames="party_id"
+                referencedTableName="geo_parties"
+                referencedColumnNames="id"/>
+        <addForeignKeyConstraint
+                constraintName="geo_users_to_parties-username-nickname"
+                baseTableName="geo_users_to_parties"
                 baseColumnNames="username"
                 referencedTableName="geo_users"
                 referencedColumnNames="nickname"/>

@@ -2,6 +2,7 @@ package mydudesgeo.service;
 
 import lombok.RequiredArgsConstructor;
 import mydudesgeo.common.Location;
+import mydudesgeo.dataservice.UserDataService;
 import mydudesgeo.dataservice.UserLocationDataService;
 import mydudesgeo.dto.user.UserLocationDto;
 import mydudesgeo.exception.ClientException;
@@ -16,6 +17,7 @@ import java.util.Optional;
 public class UserLocationService {
 
     private final UserLocationDataService dataService;
+    private final UserDataService userDataService;
 
     private final UserLocationMapper mapper;
 
@@ -38,6 +40,6 @@ public class UserLocationService {
 
     //todo move to userService
     public void changeFreezeToggle(String name, Boolean freeze) {
-        dataService.changeFreezeToggle(name, freeze);
+        userDataService.changeFreezeToggle(name, freeze);
     }
 }

@@ -9,6 +9,7 @@ import mydudesgeo.exception.ClientException;
 import mydudesgeo.mapper.PartyRoleMapper;
 import mydudesgeo.model.PartyModel;
 import mydudesgeo.model.PartyRoleModel;
+import mydudesgeo.model.UserModel;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -95,17 +96,17 @@ public class PartyRoleService {
     }
 
     private void validatePartyCreator(PartyModel partyModel) {
-        String currentUser = UserContextService.getCurrentUser();
+        String currentUser = UserCredentialsService.getCurrentUser();
 
-        if (!StringUtils.equals(currentUser, partyModel.getCreator())) {
+        if (!StringUtils.equals(currentUser, partyModel.getCreator().getNickname())) {
             throw ClientException.of(HttpStatus.BAD_REQUEST, "Вы не создатель мероприятия");
         }
     }
 
     private void validatePartyParticipant(PartyModel partyModel) {
-        String currentUser = UserContextService.getCurrentUser();
+        String currentUser = UserCredentialsService.getCurrentUser();
 
-        if (!partyModel.getParticipants().contains(currentUser)) {
+        if (partyModel.getParticipants().stream().map(UserModel::getNickname).noneMatch(v -> v.equals(currentUser))) {
             throw ClientException.of(HttpStatus.BAD_REQUEST, "Вы не участник мероприятия");
         }
     }
@@ -119,16 +120,15 @@ public class PartyRoleService {
     }
 
     private void validateCurrentUserOrCreator(Long roleId, String user) {
-        String currentUser = UserContextService.getCurrentUser();
+        String currentUser = UserCredentialsService.getCurrentUser();
 
         PartyRoleModel partyRoleModel = getPartyRoleById(roleId);
 
-        if (!StringUtils.equals(partyRoleModel.getParty().getCreator(), user)
+        if (!StringUtils.equals(partyRoleModel.getParty().getCreator().getNickname(), user)
                 && !StringUtils.equals(currentUser, user)) {
             throw ClientException.of(HttpStatus.NOT_FOUND,
                     "Действие может совершать только сам пользователь или организатор мероприятия");
         }
-
     }
 
     private PartyRoleModel getPartyRoleById(Long roleId) {

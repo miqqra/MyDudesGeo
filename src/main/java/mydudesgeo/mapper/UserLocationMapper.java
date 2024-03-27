@@ -22,7 +22,6 @@ public abstract class UserLocationMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "time", ignore = true)
-    @Mapping(target = "freeze", constant = "false")
     public abstract UserLocation toEntity(String name, Location location);
 
     @AfterMapping

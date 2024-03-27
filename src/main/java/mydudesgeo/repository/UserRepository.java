@@ -23,4 +23,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
             """)
     void updatePhoto(byte[] photo, String nickname);
 
+    @Modifying
+    @Query("""
+                update User set freezeLocation = :freezeLocation where nickname = :nickname
+            """)
+    void changeFreezeToggle(String nickname, Boolean freezeLocation);
+
 }

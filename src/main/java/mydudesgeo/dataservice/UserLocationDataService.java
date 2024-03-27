@@ -20,7 +20,7 @@ public class UserLocationDataService {
 
     @Transactional(readOnly = true)
     public boolean existsByName(String name) {
-        return repository.existsByName(name);
+        return repository.existsByUserNickname(name);
     }
 
     @Transactional
@@ -34,7 +34,7 @@ public class UserLocationDataService {
     @Transactional
     public UserLocationModel updateLocation(String name, Location location) {
         return Optional.of(name)
-                .map(repository::getUserByName)
+                .map(repository::findByUserNickname)
                 .map(user -> mapper.updateLocation(user, location))
                 .map(repository::save)
                 .map(mapper::toModel)
@@ -44,15 +44,10 @@ public class UserLocationDataService {
     @Transactional(readOnly = true)
     public UserLocationModel getLocation(String user) {
         return Optional.of(user)
-                .map(repository::getUserByName)
+                .map(repository::findByUserNickname)
                 .map(mapper::toModel)
                 .orElse(null);
 
         //todo checkvisibility
-    }
-
-    @Transactional
-    public void changeFreezeToggle(String name, Boolean freeze) {
-        repository.changeFreezeToggle(name, freeze);
     }
 }

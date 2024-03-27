@@ -43,4 +43,9 @@ public class UserDataService {
     public void deletePhoto(String nickname) {
         repository.deletePhotoByNickname(nickname);
     }
+
+    @Transactional
+    public void changeFreezeToggle(String name, Boolean freeze) {
+        repository.changeFreezeToggle(name, freeze);
+    }
 }

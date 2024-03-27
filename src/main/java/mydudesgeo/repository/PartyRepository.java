@@ -21,7 +21,7 @@ public interface PartyRepository extends JpaRepository<Party, Long> {
 
     @Query("""
             select p from Party p
-            where ST_DWithin(p.location, ST_MakePoint(:longitude, :latitude), :radius)
+            where ST_DWithin(p.location, ST_MakePoint(:longitude, :latitude), :radius) = true
             """)
     List<Party> getPartiesAround(Double latitude, Double longitude, Double radius);
 }

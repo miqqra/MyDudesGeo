@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserCredentialsRepository extends JpaRepository<UserCredentials, Long> {
-
     UserCredentials findByUsername(@Size(min = 2, message = "Не меньше 5 знаков") String username);
+
+    boolean existsByUsername(@Size(min = 2, message = "Не меньше 5 знаков") String username);
 }

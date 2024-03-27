@@ -11,6 +11,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -59,8 +61,12 @@ public class Party {
 
     @Column(name = "participants")
     @JdbcTypeCode(SqlTypes.JSON)
-    //todo fk on geo_users
-    private List<String> participants;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "geo_users_to_parties",
+            joinColumns = @JoinColumn(name = "party_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "username", referencedColumnName = "nickname"))
+    private List<User> participants;
 
     @Column(name = "limits")
     private Integer limits;
@@ -77,6 +83,6 @@ public class Party {
     private ZonedDateTime endTime;
 
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id", referencedColumnName = "party_id", updatable = false)
+    @JoinColumn(name = "party_id", referencedColumnName = "id", updatable = false)
     private List<PartyRole> roles;
 }

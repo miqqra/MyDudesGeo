@@ -45,7 +45,7 @@ public class PartyRole {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "geo_party_roles_to_users",
             joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "username", referencedColumnName = "name")
-    ) //todo fix
+            inverseJoinColumns = @JoinColumn(name = "username", referencedColumnName = "nickname")
+    )
     private Set<User> users;
 }

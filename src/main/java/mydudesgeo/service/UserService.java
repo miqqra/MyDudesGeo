@@ -29,7 +29,7 @@ public class UserService {
     }
 
     public UserDto createInfo(UpdateUserInfoDto dto) {
-        String nickname = UserContextService.getCurrentUser();
+        String nickname = UserCredentialsService.getCurrentUser();
 
         return Optional.of(dto)
                 .map(v -> mapper.toModel(v, nickname))
@@ -39,7 +39,7 @@ public class UserService {
     }
 
     public UserDto updateInfo(UpdateUserInfoDto dto) {
-        String nickname = UserContextService.getCurrentUser();
+        String nickname = UserCredentialsService.getCurrentUser();
 
         return Optional.of(dto)
                 .map(v -> mapper.toModel(v, nickname))
@@ -51,7 +51,7 @@ public class UserService {
     public void changePhoto(MultipartFile file) {
         try {
             byte[] content = file.getBytes();
-            String nickname = UserContextService.getCurrentUser();
+            String nickname = UserCredentialsService.getCurrentUser();
             dataService.changePhoto(content, nickname);
         } catch (IOException e) {
             throw ClientException.of(HttpStatus.BAD_REQUEST, "Ошибка при обработке фото");
@@ -59,7 +59,7 @@ public class UserService {
     }
 
     public void deletePhoto() {
-        String nickname = UserContextService.getCurrentUser();
+        String nickname = UserCredentialsService.getCurrentUser();
 
         dataService.deletePhoto(nickname);
     }

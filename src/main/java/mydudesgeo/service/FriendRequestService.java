@@ -21,15 +21,17 @@ public class FriendRequestService {
     private final FriendRequestMapper mapper;
 
     public void sendRequest(String to) {
+        String currentUser = UserCredentialsService.getCurrentUser();
+
         Optional.ofNullable(to)
-                .map(mapper::toModel)
+                .map(v -> mapper.toModel(currentUser, v))
                 .map(friendRequestDataService::sendRequest)
                 .orElseThrow(() -> ClientException.of(HttpStatus.BAD_REQUEST,
                         "Не удалось отправить запрос дружбы"));
     }
 
     public void acceptRequest(String from) {
-        String to = "changeIt"; //todo change for current operator
+        String to = UserCredentialsService.getCurrentUser();
 
         //todo validate
         friendRequestDataService.acceptRequest(from, to);
@@ -38,7 +40,7 @@ public class FriendRequestService {
     }
 
     public void rejectRequest(String from) {
-        String to = "changeIt"; //todo change for current operator
+        String to = UserCredentialsService.getCurrentUser();
 
         //todo validate
         friendRequestDataService.rejectRequest(from, to);

@@ -92,6 +92,7 @@
             <version>${hibernate.version}</version>
             <type>pom</type>
         </dependency>
+
         <dependency>
             <groupId>com.vividsolutions</groupId>
             <artifactId>jts</artifactId>
