@@ -8,6 +8,112 @@
 
     <changeSet id="1" author="krasnikov" context="schema">
         <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                select count(*)
+                from pg_extension
+                where extname = 'postgis'
+            </sqlCheck>
+        </preConditions>
+
+        <sql>
+            CREATE
+            EXTENSION postgis;
+        </sql>
+    </changeSet>
+
+    <changeSet id="2" author="krasnikov" context="schema">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="geo_users_credentials"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="geo_users_credentials">
+            <column name="id" type="bigserial" remarks="Id записи"
+                    autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="username" type="text" remarks="Логин пользователя">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="text" remarks="Пароль пользователя">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="krasnikov" context="schema">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="geo_users"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="geo_users">
+            <column name="id" type="bigserial" remarks="Id записи"
+                    autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="nickname" type="text" remarks="Ник пользователя">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="firstname" type="text" remarks="Имя пользователя">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lastname" type="text" remarks="Фамилия пользователя">
+                <constraints nullable="false"/>
+            </column>
+            <column name="birthdate" type="date" remarks="Дата рождения пользователя"/>
+            <column name="sex" type="text" remarks="Пол пользователя">
+                <!--                <constraints nullable="false"/>-->
+            </column>
+            <column name="info" type="text" remarks="О себе"/>
+            <column name="photo" type="blob" remarks="Фото пользователя"/>
+            <column name="freeze_location" type="boolean"
+                    remarks="Флаг заморозки локации пользователя"
+                    defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="4" author="krasnikov" context="schema">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="geo_users_location"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="geo_users_location">
+            <column name="id" type="bigserial" remarks="Id мероприятия"
+                    autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="nickname" type="text" remarks="Ник пользователя">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="latitude" type="double" remarks="Широта">
+                <constraints nullable="false"/>
+            </column>
+            <column name="longitude" type="double" remarks="Долгота">
+                <constraints nullable="false"/>
+            </column>
+            <column name="time" type="timestamptz"
+                    remarks="Время считывания позиции">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                constraintName="fk-geo_users_location-nickname-nickname"
+                baseTableName="geo_users_location"
+                baseColumnNames="nickname"
+                referencedTableName="geo_users"
+                referencedColumnNames="nickname"/>
+    </changeSet>
+
+    <changeSet id="5" author="krasnikov" context="schema">
+        <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="geo_parties_category"/>
             </not>
@@ -20,12 +126,12 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="category" type="text" remarks="Тип мероприятия">
-                <constraints unique="true"/>
+                <constraints nullable="false" unique="true"/>
             </column>
         </createTable>
     </changeSet>
 
-    <changeSet id="2" author="krasnikov" context="schema">
+    <changeSet id="6" author="krasnikov" context="schema">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="geo_parties"/>
@@ -48,8 +154,10 @@
                     remarks="Тип мероприятия">
                 <constraints nullable="false"/>
             </column>
-            <column name="location" type="jsonb"
-                    remarks="Местоположение мероприятия">
+            <column name="latitude" type="double" remarks="Широта">
+                <constraints nullable="false"/>
+            </column>
+            <column name="longitude" type="double" remarks="Долгота">
                 <constraints nullable="false"/>
             </column>
             <column name="creator" type="text" remarks="Создатель мероприятия">
@@ -72,44 +180,40 @@
                     remarks="Время конца мероприятия"/>
         </createTable>
 
-        <addForeignKeyConstraint constraintName="fk-category"
-                                 baseTableName="geo_parties"
-                                 baseColumnNames="category"
-                                 referencedTableName="geo_parties_category"
-                                 referencedColumnNames="category"/>
+        <addForeignKeyConstraint
+                constraintName="fk-category"
+                baseTableName="geo_parties"
+                baseColumnNames="category"
+                referencedTableName="geo_parties_category"
+                referencedColumnNames="category"/>
+
+        <addForeignKeyConstraint
+                constraintName="fk-geo_parties-creator-nickname"
+                baseTableName="geo_parties"
+                baseColumnNames="creator"
+                referencedTableName="geo_users"
+                referencedColumnNames="nickname"/>
     </changeSet>
 
-    <changeSet id="3" author="krasnikov" context="schema">
+    <changeSet id="7" author="krasnikov" context="schema">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="geo_users"/>
+                <tableExists tableName="geo_hobbies"/>
             </not>
         </preConditions>
 
-        <createTable tableName="geo_users">
-            <column name="id" type="bigserial" remarks="Id мероприятия"
+        <createTable tableName="geo_hobbies">
+            <column name="id" type="bigserial" remarks="Id записи"
                     autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="name" type="text" remarks="Id пользователя">
-                <constraints nullable="false"/>
-            </column>
-            <column name="location" type="jsonb"
-                    remarks="Местоположение пользователя">
-                <constraints nullable="false"/>
-            </column>
-            <column name="time" type="timestamptz"
-                    remarks="Время считывания позиции">
-                <constraints nullable="false"/>
-            </column>
-            <column name="freezed" type="boolean"
-                    remarks="Заморозка местоположения">
-                <constraints nullable="false"/>
+            <column name="name" type="text" remarks="Название хобби">
+                <constraints nullable="false" unique="true"/>
             </column>
         </createTable>
     </changeSet>
 
-    <changeSet id="4" author="krasnikov" context="schema">
+    <changeSet id="8" author="krasnikov" context="schema">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="geo_friends"/>
@@ -128,9 +232,22 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+
+        <addForeignKeyConstraint
+                constraintName="fk-geo_friends-person-nickname"
+                baseTableName="geo_friends"
+                baseColumnNames="person"
+                referencedTableName="geo_users"
+                referencedColumnNames="nickname"/>
+        <addForeignKeyConstraint
+                constraintName="fk-geo_friends-friend-nickname"
+                baseTableName="geo_friends"
+                baseColumnNames="friend"
+                referencedTableName="geo_users"
+                referencedColumnNames="nickname"/>
     </changeSet>
 
-    <changeSet id="5" author="krasnikov" context="schema">
+    <changeSet id="9" author="krasnikov" context="schema">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="geo_close_friends"/>
@@ -149,6 +266,247 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+
+        <addForeignKeyConstraint
+                constraintName="fk-geo_close_friends-person-nickname"
+                baseTableName="geo_close_friends"
+                baseColumnNames="person"
+                referencedTableName="geo_users"
+                referencedColumnNames="nickname"/>
+        <addForeignKeyConstraint
+                constraintName="fk-geo_close_friends-friend-nickname"
+                baseTableName="geo_close_friends"
+                baseColumnNames="friend"
+                referencedTableName="geo_users"
+                referencedColumnNames="nickname"/>
     </changeSet>
+
+    <changeSet id="10" author="krasnikov" context="schema">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="geo_friend_requests"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="geo_friend_requests">
+            <column name="id" type="bigserial" remarks="Id запроса"
+                    autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="request_from" type="text"
+                    remarks="От кого поступил запрос на дружбу">
+                <constraints nullable="false"/>
+            </column>
+            <column name="request_to" type="text"
+                    remarks="Кому поступил запрос на дружбу">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="text" remarks="Статус заявки">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                constraintName="fk-geo_friend_requests-request_from-nickname"
+                baseTableName="geo_friend_requests"
+                baseColumnNames="request_from"
+                referencedTableName="geo_users"
+                referencedColumnNames="nickname"/>
+        <addForeignKeyConstraint
+                constraintName="fk-geo_friend_requests-request_to-nickname"
+                baseTableName="geo_friend_requests"
+                baseColumnNames="request_to"
+                referencedTableName="geo_users"
+                referencedColumnNames="nickname"/>
+    </changeSet>
+
+    <changeSet id="11" author="krasnikov" context="schema">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="geo_roles"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="geo_roles">
+            <column name="id" type="bigserial" remarks="Id записи" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="text"
+                    remarks="Название роли: удовлетворяет формату ROLE_*">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="12" author="krasnikov" context="schema">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="geo_users_to_roles"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="geo_users_to_roles">
+            <column name="id" type="bigserial" remarks="Id записи"
+                    autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="bigserial" remarks="Id пользователя">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="bigserial" remarks="Id роли">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                constraintName="fk-geo_users_to_roles-user_id-id"
+                baseTableName="geo_users_to_roles"
+                baseColumnNames="user_id"
+                referencedTableName="geo_users"
+                referencedColumnNames="id"/>
+        <addForeignKeyConstraint
+                constraintName="fk-geo_users_to_roles-role_id-id"
+                baseTableName="geo_users_to_roles"
+                baseColumnNames="role_id"
+                referencedTableName="geo_roles"
+                referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="13" author="krasnikov" context="schema">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="geo_party_roles"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="geo_party_roles">
+            <column name="id" type="bigserial" remarks="Id роли"
+                    autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="text" remarks="Название роли">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text" remarks="Описание роли">
+                <constraints nullable="false"/>
+            </column>
+            <column name="party_id" type="bigserial" remarks="Id мероприятия">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                constraintName="geo_party_roles-party_id-id"
+                baseTableName="geo_party_roles"
+                baseColumnNames="party_id"
+                referencedTableName="geo_parties"
+                referencedColumnNames="id"/>
+
+    </changeSet>
+    <!--    todo сделать слепок роли, которую можно закидывать в любое мероприятие-->
+
+
+    <changeSet id="14" author="krasnikov" context="schema">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="geo_party_roles_to_users"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="geo_party_roles_to_users">
+            <column name="id" type="bigserial" remarks="Id записи" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="role_id" type="bigserial"
+                    remarks="Id роли мероприятия">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" type="text" remarks="Логин пользователя">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                constraintName="geo_party_roles_to_users-role_id-id"
+                baseTableName="geo_party_roles_to_users"
+                baseColumnNames="role_id"
+                referencedTableName="geo_party_roles"
+                referencedColumnNames="id"/>
+        <addForeignKeyConstraint
+                constraintName="geo_party_roles_to_users-username-nickname"
+                baseTableName="geo_party_roles_to_users"
+                baseColumnNames="username"
+                referencedTableName="geo_users"
+                referencedColumnNames="nickname"/>
+    </changeSet>
+
+    <changeSet id="15" author="krasnikov" context="schema">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="geo_users_to_hobbies"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="geo_users_to_hobbies">
+            <column name="id" type="bigserial" remarks="Id записи" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="hobby_name" type="text"
+                    remarks="Id роли мероприятия">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" type="text" remarks="Логин пользователя">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                constraintName="geo_users_to_hobbies-hobby_name-name"
+                baseTableName="geo_users_to_hobbies"
+                baseColumnNames="hobby_name"
+                referencedTableName="geo_hobbies"
+                referencedColumnNames="name"/>
+        <addForeignKeyConstraint
+                constraintName="geo_users_to_hobbies-username-nickname"
+                baseTableName="geo_users_to_hobbies"
+                baseColumnNames="username"
+                referencedTableName="geo_users"
+                referencedColumnNames="nickname"/>
+    </changeSet>
+
+    <changeSet id="16" author="krasnikov" context="schema">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="geo_users_to_parties"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="geo_users_to_parties">
+            <column name="id" type="bigserial" remarks="Id записи" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="party_id" type="bigserial"
+                    remarks="Id мероприятия">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" type="text" remarks="Логин пользователя - участника мероприятия">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                constraintName="geo_users_to_parties-party_id-id"
+                baseTableName="geo_users_to_parties"
+                baseColumnNames="party_id"
+                referencedTableName="geo_parties"
+                referencedColumnNames="id"/>
+        <addForeignKeyConstraint
+                constraintName="geo_users_to_parties-username-nickname"
+                baseTableName="geo_users_to_parties"
+                baseColumnNames="username"
+                referencedTableName="geo_users"
+                referencedColumnNames="nickname"/>
+    </changeSet>
+
 
 </databaseChangeLog>

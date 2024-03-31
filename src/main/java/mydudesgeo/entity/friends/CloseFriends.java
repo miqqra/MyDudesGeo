@@ -2,13 +2,17 @@ package mydudesgeo.entity.friends;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import mydudesgeo.entity.User;
 
 @Entity
 @Table(name = "geo_close_friends")
@@ -16,6 +20,7 @@ import lombok.Setter;
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class CloseFriends extends FriendTemplate {
+    //todo change to many to many
 
     @Id
     @EqualsAndHashCode.Include
@@ -23,9 +28,11 @@ public class CloseFriends extends FriendTemplate {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "person")
-    private String person;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "person", referencedColumnName = "nickname")
+    private User person;
 
-    @Column(name = "friend")
-    private String friend;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "friend", referencedColumnName = "nickname")
+    private User friend;
 }

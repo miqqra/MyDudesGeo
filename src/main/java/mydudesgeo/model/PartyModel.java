@@ -1,7 +1,7 @@
 package mydudesgeo.model;
 
 import lombok.Data;
-import mydudesgeo.data.Point;
+import mydudesgeo.common.Location;
 import mydudesgeo.data.Visibility;
 
 import java.time.ZonedDateTime;
@@ -13,10 +13,10 @@ public class PartyModel {
     private Long id;
     private String name;
     private String description;
-    private String category;
-    private Point location;
-    private String creator;
-    private List<String> participants;
+    private PartyCategoryModel category;
+    private Location location;
+    private UserModel creator;
+    private List<UserModel> participants;
     private Integer limits;
     private Visibility visibility;
     private ZonedDateTime startTime;

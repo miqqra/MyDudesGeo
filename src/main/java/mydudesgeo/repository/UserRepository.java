@@ -9,14 +9,29 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    boolean existsByName(String name);
+    User findByNickname(String nickname);
 
-    User getUserByName(String name);
+    @Query("""
+            select u.freezeLocation from User u where u.nickname = :nickname
+            """)
+    Boolean findFreezeFlagByNickname(String nickname);
 
     @Modifying
     @Query("""
-                update User set freeze = :freeze where name = :name
+            update User set photo = null where nickname = :nickname
             """)
-    void changeFreezeToggle(String name, Boolean freeze);
+    void deletePhotoByNickname(String nickname);
+
+    @Modifying
+    @Query("""
+            update User set photo = :photo where nickname = :nickname
+            """)
+    void updatePhoto(byte[] photo, String nickname);
+
+    @Modifying
+    @Query("""
+                update User set freezeLocation = :freezeLocation where nickname = :nickname
+            """)
+    void changeFreezeToggle(String nickname, Boolean freezeLocation);
 
 }

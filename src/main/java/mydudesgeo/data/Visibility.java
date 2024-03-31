@@ -1,5 +1,12 @@
 package mydudesgeo.data;
 
+import jakarta.persistence.AttributeConverter;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Converter;
+import mydudesgeo.common.EnumConverter;
+import org.aspectj.asm.internal.NameConvertor;
+import org.mapstruct.Named;
+
 import java.util.Optional;
 
 public enum Visibility {
@@ -8,15 +15,10 @@ public enum Visibility {
     ALL,
     CLOSE_FRIENDS;
 
-    public static Visibility getEnum(String visibility) {
-        return Optional.of(visibility)
-                .map(Visibility::valueOf)
-                .orElse(null);
-    }
-
-    public static String getName(Visibility visibility) {
-        return Optional.of(visibility)
-                .map(Visibility::getName)
-                .orElse(null);
+    @Converter(autoApply = true)
+    public static class VisibilityConverter extends EnumConverter<Visibility> {
+        public VisibilityConverter() {
+            super(Visibility.class, null); //add none
+        }
     }
 }

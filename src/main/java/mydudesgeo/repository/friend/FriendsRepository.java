@@ -9,9 +9,9 @@ import java.util.List;
 @Repository
 public interface FriendsRepository extends JpaRepository<Friends, Long> {
 
-    boolean existsByFriendAndPerson(String friend, String person);
+    boolean existsByFriendNicknameAndPersonNickname(String friend, String person);
 
-    List<Friends> findAllByPerson(String person);
+    List<Friends> findByPersonNickname(String person);
 
-    void deleteByPersonAndFriend(String person, String friend);
+    void deleteByPersonNicknameAndFriendNickname(String person, String friend);
 }

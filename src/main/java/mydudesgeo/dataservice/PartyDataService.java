@@ -1,7 +1,7 @@
 package mydudesgeo.dataservice;
 
 import lombok.RequiredArgsConstructor;
-import mydudesgeo.data.Point;
+import mydudesgeo.common.Location;
 import mydudesgeo.data.Visibility;
 import mydudesgeo.dto.party.UpdatePartyDto;
 import mydudesgeo.exception.ClientException;
@@ -38,9 +38,9 @@ public class PartyDataService {
     }
 
     @Transactional(readOnly = true)
-    public List<PartyModel> getPartiesAround(Integer radius, Point location) {
+    public List<PartyModel> getPartiesAround(Location location, Double radius) {
         return Optional.of(radius)
-                .map(r -> repository.getPartiesAround(r, location))
+                .map(r -> repository.getPartiesAround(location.getLatitude(), location.getLongitude(), radius))
                 .stream()
                 .flatMap(Collection::stream)
                 .map(mapper::toModel)
@@ -50,7 +50,17 @@ public class PartyDataService {
     @Transactional(readOnly = true)
     public List<PartyModel> getUserParties(String user) {
         return Optional.ofNullable(user)
-                .map(repository::findAllByCreator)
+                .map(repository::findByCreatorNickname)
+                .stream()
+                .flatMap(Collection::stream)
+                .map(mapper::toModel)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<PartyModel> searchParties(String search) {
+        return Optional.of(search)
+                .map(repository::searchPartiesByCreatorOrName)
                 .stream()
                 .flatMap(Collection::stream)
                 .map(mapper::toModel)
@@ -70,12 +80,7 @@ public class PartyDataService {
     public PartyModel updateParty(Long id, UpdatePartyDto dto) {
         return Optional.of(id)
                 .flatMap(repository::findById)
-                .map(party -> party
-                        .setName(dto.getName())
-                        .setDescription(dto.getDescription())
-                        .setLocation(dto.getLocation())
-                        .setLimits(dto.getLimits())
-                )
+                .map(v -> mapper.toEntity(v, dto))
                 .map(repository::save)
                 .map(mapper::toModel)
                 .orElse(null);

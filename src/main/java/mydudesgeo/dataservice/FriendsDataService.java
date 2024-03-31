@@ -9,6 +9,7 @@ import mydudesgeo.exception.ClientException;
 import mydudesgeo.mapper.FriendMapper;
 import mydudesgeo.model.FriendModel;
 import mydudesgeo.model.PartyModel;
+import mydudesgeo.model.UserModel;
 import mydudesgeo.repository.friend.CloseFriendsRepository;
 import mydudesgeo.repository.friend.FriendsRepository;
 import org.springframework.http.HttpStatus;
@@ -44,8 +45,7 @@ public class FriendsDataService {
     public FriendModel addFriend(Visibility visibility, String person, String friend) {
         switch (visibility) {
             case FRIENDS -> save(mapper.toEntityFriends(person, friend));
-            case CLOSE_FRIENDS ->
-                    save(mapper.toEntityCloseFriends(person, friend));
+            case CLOSE_FRIENDS -> save(mapper.toEntityCloseFriends(person, friend));
             default -> {
             }
         }
@@ -63,7 +63,7 @@ public class FriendsDataService {
                 .map(PartyModel::getVisibility)
                 .orElseThrow(() -> ClientException.of(HttpStatus.NOT_FOUND, "Не найдена видимость мероприятия"));
 
-        String friend = Optional.of(party)
+        UserModel friend = Optional.of(party)
                 .map(PartyModel::getCreator)
                 .orElseThrow(() -> ClientException.of(HttpStatus.NOT_FOUND, "Не найден id создателя мероприятия"));
 
@@ -71,35 +71,30 @@ public class FriendsDataService {
             throw ClientException.of(HttpStatus.BAD_REQUEST, "Не указан пользователь");
         }
 
-        return existsByPersonAndFriend(visibility, friend, user);
+        return existsByPersonAndFriend(visibility, friend.getNickname(), user);
     }
 
     private boolean existsByPersonAndFriend(Visibility visibility, String person, String friend) {
         return switch (visibility) {
-            case FRIENDS ->
-                    friendsRepository.existsByFriendAndPerson(friend, person);
-            case CLOSE_FRIENDS ->
-                    closeFriendsRepository.existsByFriendAndPerson(friend, person);
+            case FRIENDS -> friendsRepository.existsByFriendNicknameAndPersonNickname(friend, person);
+            case CLOSE_FRIENDS -> closeFriendsRepository.existsByFriendNicknameAndPersonNickname(friend, person);
             case ALL -> true;
         };
     }
 
     private FriendModel getAll(Visibility visibility, String person) {
         return switch (visibility) {
-            case FRIENDS ->
-                    mapper.toModelFriends(friendsRepository.findAllByPerson(person), person, visibility);
+            case FRIENDS -> mapper.toModelFriends(friendsRepository.findByPersonNickname(person), person, visibility);
             case CLOSE_FRIENDS ->
-                    mapper.toModelCloseFriends(closeFriendsRepository.findAllByPerson(person), person, visibility);
-            case ALL -> FriendModel.emptyFriendList(visibility, person);
+                    mapper.toModelCloseFriends(closeFriendsRepository.findByPersonNickname(person), person, visibility);
+            case ALL -> null;
         };
     }
 
     private void deleteByPersonAndFriend(Visibility visibility, String person, String friend) {
         switch (visibility) {
-            case FRIENDS ->
-                    friendsRepository.deleteByPersonAndFriend(person, friend);
-            case CLOSE_FRIENDS ->
-                    closeFriendsRepository.deleteByPersonAndFriend(person, friend);
+            case FRIENDS -> friendsRepository.deleteByPersonNicknameAndFriendNickname(person, friend);
+            case CLOSE_FRIENDS -> closeFriendsRepository.deleteByPersonNicknameAndFriendNickname(person, friend);
             case ALL -> {
             }
         }

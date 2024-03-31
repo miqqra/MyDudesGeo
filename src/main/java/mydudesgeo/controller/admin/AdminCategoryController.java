@@ -1,6 +1,7 @@
 package mydudesgeo.controller.admin;
 
 import io.swagger.v3.oas.annotations.Operation;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import mydudesgeo.dto.category.CreateCategoryDto;
 import mydudesgeo.dto.category.PartyCategoryDto;
@@ -15,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("admin/api/mydudes/geo/category")
@@ -25,25 +24,25 @@ public class AdminCategoryController {
     private final PartyCategoryService service;
 
     @GetMapping
-    @Operation(description = "Получение категорий")
+    @Operation(summary = "Получение категорий")
     public List<PartyCategoryDto> getCategories() {
         return service.getCategories();
     }
 
     @PostMapping
-    @Operation(description = "Добавление новой категории")
+    @Operation(summary = "Добавление новой категории")
     public PartyCategoryDto createCategory(@RequestBody CreateCategoryDto dto) {
         return service.createCategory(dto);
     }
 
     @PutMapping
-    @Operation(description = "Редактирование категории")
+    @Operation(summary = "Редактирование категории")
     public PartyCategoryDto updateCategory(@Validated @RequestBody PartyCategoryDto dto) {
         return service.updateCategory(dto);
     }
 
     @DeleteMapping("/{id}")
-    @Operation(description = "Удаление категорий")
+    @Operation(summary = "Удаление категорий")
     public void deleteCategory(@PathVariable Long id) {
         service.deleteCategory(id);
     }
