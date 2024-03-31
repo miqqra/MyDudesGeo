@@ -1,13 +1,12 @@
 package mydudesgeo.dataservice;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import mydudesgeo.mapper.UserMapper;
 import mydudesgeo.model.UserModel;
 import mydudesgeo.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +30,13 @@ public class UserDataService {
                 .map(mapper::toEntity)
                 .map(repository::save)
                 .map(mapper::toModel)
+                .orElse(null);
+    }
+
+    @Transactional(readOnly = true)
+    public Boolean getFreezeToggle(String nickname) {
+        return Optional.of(nickname)
+                .map(repository::findFreezeFlagByNickname)
                 .orElse(null);
     }
 

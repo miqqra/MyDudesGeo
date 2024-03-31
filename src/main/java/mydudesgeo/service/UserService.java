@@ -1,17 +1,17 @@
 package mydudesgeo.service;
 
+import java.io.IOException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import mydudesgeo.dataservice.UserDataService;
 import mydudesgeo.dto.user.UpdateUserInfoDto;
 import mydudesgeo.dto.user.UserDto;
 import mydudesgeo.exception.ClientException;
 import mydudesgeo.mapper.UserMapper;
+import mydudesgeo.model.UserModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +46,13 @@ public class UserService {
                 .map(dataService::create)
                 .map(mapper::toDto)
                 .orElseThrow(() -> ClientException.of(HttpStatus.NOT_FOUND, "Не удалось обновить профиль пользоввателя"));
+    }
+
+    public byte[] getPhoto(String nickname) {
+        return Optional.of(nickname)
+                .map(dataService::getInfo)
+                .map(UserModel::getPhoto)
+                .orElse(null);
     }
 
     public void changePhoto(MultipartFile file) {

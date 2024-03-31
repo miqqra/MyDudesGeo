@@ -2,6 +2,9 @@ package mydudesgeo.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import java.security.Principal;
+import java.util.Objects;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mydudesgeo.dataservice.UserDataService;
@@ -21,9 +24,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -38,9 +38,7 @@ public class UserCredentialsService {
     public static String getCurrentUser() {
         return Optional.of(SecurityContextHolder.getContext())
                 .map(SecurityContext::getAuthentication)
-                .map(Authentication::getCredentials)
-                .map(v -> (UserCredentials) v)
-                .map(UserCredentials::getUsername)
+                .map(Principal::getName)
                 .orElseThrow(() -> ClientException.of(HttpStatus.FORBIDDEN, "Клиент не авторизован"));
     }
 

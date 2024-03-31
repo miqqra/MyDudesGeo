@@ -8,6 +8,21 @@
 
     <changeSet id="1" author="krasnikov" context="schema">
         <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                select count(*)
+                from pg_extension
+                where extname = 'postgis'
+            </sqlCheck>
+        </preConditions>
+
+        <sql>
+            CREATE
+            EXTENSION postgis;
+        </sql>
+    </changeSet>
+
+    <changeSet id="2" author="krasnikov" context="schema">
+        <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="geo_users_credentials"/>
             </not>
@@ -27,8 +42,7 @@
         </createTable>
     </changeSet>
 
-
-    <changeSet id="2" author="krasnikov" context="schema">
+    <changeSet id="3" author="krasnikov" context="schema">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="geo_users"/>
@@ -63,8 +77,7 @@
         </createTable>
     </changeSet>
 
-
-    <changeSet id="3" author="krasnikov" context="schema">
+    <changeSet id="4" author="krasnikov" context="schema">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="geo_users_location"/>
@@ -79,8 +92,10 @@
             <column name="nickname" type="text" remarks="Ник пользователя">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <column name="location" type="jsonb"
-                    remarks="Местоположение пользователя">
+            <column name="latitude" type="double" remarks="Широта">
+                <constraints nullable="false"/>
+            </column>
+            <column name="longitude" type="double" remarks="Долгота">
                 <constraints nullable="false"/>
             </column>
             <column name="time" type="timestamptz"
@@ -97,8 +112,7 @@
                 referencedColumnNames="nickname"/>
     </changeSet>
 
-
-    <changeSet id="4" author="krasnikov" context="schema">
+    <changeSet id="5" author="krasnikov" context="schema">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="geo_parties_category"/>
@@ -117,8 +131,7 @@
         </createTable>
     </changeSet>
 
-
-    <changeSet id="5" author="krasnikov" context="schema">
+    <changeSet id="6" author="krasnikov" context="schema">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="geo_parties"/>
@@ -141,8 +154,10 @@
                     remarks="Тип мероприятия">
                 <constraints nullable="false"/>
             </column>
-            <column name="location" type="jsonb"
-                    remarks="Местоположение мероприятия">
+            <column name="latitude" type="double" remarks="Широта">
+                <constraints nullable="false"/>
+            </column>
+            <column name="longitude" type="double" remarks="Долгота">
                 <constraints nullable="false"/>
             </column>
             <column name="creator" type="text" remarks="Создатель мероприятия">
@@ -180,8 +195,7 @@
                 referencedColumnNames="nickname"/>
     </changeSet>
 
-
-    <changeSet id="6" author="krasnikov" context="schema">
+    <changeSet id="7" author="krasnikov" context="schema">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="geo_hobbies"/>
@@ -199,8 +213,7 @@
         </createTable>
     </changeSet>
 
-
-    <changeSet id="7" author="krasnikov" context="schema">
+    <changeSet id="8" author="krasnikov" context="schema">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="geo_friends"/>
@@ -234,8 +247,7 @@
                 referencedColumnNames="nickname"/>
     </changeSet>
 
-
-    <changeSet id="8" author="krasnikov" context="schema">
+    <changeSet id="9" author="krasnikov" context="schema">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="geo_close_friends"/>
@@ -269,8 +281,7 @@
                 referencedColumnNames="nickname"/>
     </changeSet>
 
-
-    <changeSet id="9" author="krasnikov" context="schema">
+    <changeSet id="10" author="krasnikov" context="schema">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="geo_friend_requests"/>
@@ -309,8 +320,7 @@
                 referencedColumnNames="nickname"/>
     </changeSet>
 
-
-    <changeSet id="10" author="krasnikov" context="schema">
+    <changeSet id="11" author="krasnikov" context="schema">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="geo_roles"/>
@@ -328,8 +338,7 @@
         </createTable>
     </changeSet>
 
-
-    <changeSet id="11" author="krasnikov" context="schema">
+    <changeSet id="12" author="krasnikov" context="schema">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="geo_users_to_roles"/>
@@ -363,8 +372,7 @@
                 referencedColumnNames="id"/>
     </changeSet>
 
-
-    <changeSet id="12" author="krasnikov" context="schema">
+    <changeSet id="13" author="krasnikov" context="schema">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="geo_party_roles"/>
@@ -398,7 +406,7 @@
     <!--    todo сделать слепок роли, которую можно закидывать в любое мероприятие-->
 
 
-    <changeSet id="13" author="krasnikov" context="schema">
+    <changeSet id="14" author="krasnikov" context="schema">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="geo_party_roles_to_users"/>
@@ -432,7 +440,7 @@
                 referencedColumnNames="nickname"/>
     </changeSet>
 
-    <changeSet id="14" author="krasnikov" context="schema">
+    <changeSet id="15" author="krasnikov" context="schema">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="geo_users_to_hobbies"/>
@@ -466,7 +474,7 @@
                 referencedColumnNames="nickname"/>
     </changeSet>
 
-    <changeSet id="15" author="krasnikov" context="schema">
+    <changeSet id="16" author="krasnikov" context="schema">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="geo_users_to_parties"/>

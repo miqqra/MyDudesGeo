@@ -25,7 +25,7 @@ public class FriendsController {
 
     private final FriendsService service;
 
-    @Operation(description = "Получения списка друзей из определенной категории видимости")
+    @Operation(summary = "Получения списка друзей из определенной категории видимости")
     @GetMapping("/{visibility}")
     public FriendsDto getFriends(
             @Parameter(description = "Категория видимости") @PathVariable String visibility
@@ -35,7 +35,7 @@ public class FriendsController {
 
     //todo check for having person in friendlist
     //todo поменять, категория будет только близких друзей, с валидацией
-    @Operation(description = "Добавление нового друга в категорию друзей")
+    @Operation(summary = "Добавление нового друга в категорию друзей")
     @PostMapping("/{visibility}")
     public FriendsDto addFriend(
             @Parameter(description = "Категория видимости") @PathVariable Visibility visibility,
@@ -45,7 +45,7 @@ public class FriendsController {
     }
 
     //todo check for having person in friendlist
-    @Operation(description = "Удаление человека из категории друзей")
+    @Operation(summary = "Удаление человека из категории друзей")
     @DeleteMapping("/{visibility}")
     public void deleteFriend(
             @Parameter(description = "Категория видимости") @PathVariable Visibility visibility,

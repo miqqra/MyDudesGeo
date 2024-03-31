@@ -1,5 +1,6 @@
 package mydudesgeo.mapper;
 
+import java.util.List;
 import mydudesgeo.data.Visibility;
 import mydudesgeo.dto.friend.FriendsDto;
 import mydudesgeo.entity.friends.CloseFriends;
@@ -10,8 +11,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
 
 @Mapper(uses = {
         UserMapper.class
@@ -37,7 +36,7 @@ public abstract class FriendMapper {
         target.setPerson(userMapper.toModel(
                 source.isEmpty()
                         ? null
-                        : source.getFirst().getPerson()));
+                        : source.get(0).getPerson()));
     }
 
     @Mapping(target = "person", ignore = true)
@@ -48,7 +47,7 @@ public abstract class FriendMapper {
         target.setPerson(userMapper.toModel(
                 source.isEmpty()
                         ? null
-                        : source.getFirst().getPerson()));
+                        : source.get(0).getPerson()));
     }
 
     public abstract FriendsDto toDto(FriendModel source);

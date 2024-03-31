@@ -13,24 +13,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/mydudes/geo/friends/requests")
 public class FriendRequestController {
 
-    @Operation(description = "Отправить запрос дружбы")
+    @Operation(summary = "Отправить запрос дружбы")
     @PostMapping("/send/{to}")
     public void sendRequest(
             @Parameter(description = "Пользователь, которому отправляется запрос") @PathVariable String to) {
-
+        //todo
     }
 
-    @Operation(description = "Принять запрос дружбы")
+    @Operation(summary = "Принять запрос дружбы")
     @PostMapping("/accept/{to}")
     public void acceptRequest(
             @Parameter(description = "Пользователь, которому отправляется запрос") @PathVariable String to) {
-
+        //todo
     }
 
-    @Operation(description = "Отклонить запрос дружбы")
+    @Operation(summary = "Отклонить запрос дружбы")
     @PostMapping("/reject/{to}")
     public void rejectRequest(
             @Parameter(description = "Пользователь, которому отправляется запрос") @PathVariable String to) {
-
+        //todo
     }
 }

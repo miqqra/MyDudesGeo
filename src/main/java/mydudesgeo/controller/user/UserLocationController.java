@@ -16,30 +16,28 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/mydudes/geo/{user}/location")
+@RequestMapping("api/mydudes/geo/location")
 public class UserLocationController {
 
     private final UserLocationService service;
 
     @PutMapping
-    @Operation(description = "Обновление локации пользователя")
-    public void updateLocation(@Parameter(description = "Id пользователя") @PathVariable String user,
-                               @RequestBody Location location) {
-        service.updateLocation(user, location);
+    @Operation(summary = "Обновление локации пользователя")
+    public void updateLocation(@RequestBody Location location) {
+        service.updateLocation(location);
     }
 
-    @GetMapping
-    @Operation(description = "Получение локации пользователя")
-    public UserLocationDto getLocation(@Parameter(description = "Id пользователя") @PathVariable String user) {
+    @GetMapping("/{user}")
+    @Operation(summary = "Получение локации пользователя")
+    public UserLocationDto getLocation(@Parameter(description = "Никнейм пользователя") @PathVariable String user) {
         return service.getLocation(user);
         //todo checkvisibility
         //todo filter by freeze
     }
 
     @PutMapping("/freeze")
-    @Operation(description = "Изменение состояния заморозки пользователя")
-    public void changeFreezeToggle(@Parameter(description = "Id пользователя") @PathVariable String user,
-                                   @Parameter(description = "Новое состояние") @RequestParam Boolean freeze) {
-        service.changeFreezeToggle(user, freeze);
+    @Operation(summary = "Изменение состояния заморозки пользователя")
+    public void changeFreezeToggle(@Parameter(description = "Новое состояние") @RequestParam Boolean freeze) {
+        service.changeFreezeToggle(freeze);
     }
 }

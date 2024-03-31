@@ -1,22 +1,25 @@
 package mydudesgeo.dataservice;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import mydudesgeo.common.Location;
 import mydudesgeo.mapper.UserLocationMapper;
+import mydudesgeo.mapper.UserMapper;
 import mydudesgeo.model.UserLocationModel;
+import mydudesgeo.model.UserModel;
 import mydudesgeo.repository.UserLocationRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class UserLocationDataService {
+    //don't user repo::save, use repo::create, repo::update instead
 
     private final UserLocationRepository repository;
 
     private final UserLocationMapper mapper;
+    private final UserMapper userMapper;
 
     @Transactional(readOnly = true)
     public boolean existsByName(String name) {
@@ -24,8 +27,9 @@ public class UserLocationDataService {
     }
 
     @Transactional
-    public void createUser(String name, Location location) {
-        Optional.of(name)
+    public void createUser(UserModel userModel, Location location) {
+        Optional.of(userModel)
+                .map(userMapper::toEntity)
                 .map(n -> mapper.toEntity(n, location))
                 .map(repository::save)
                 .map(mapper::toModel);

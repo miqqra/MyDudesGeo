@@ -8,6 +8,6 @@ import lombok.Data;
 public class CreateCategoryDto {
 
     @NotBlank
-    @Schema(description = "Новая категория")
+    @Schema(description = "Название категории")
     private String category;
 }

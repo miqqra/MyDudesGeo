@@ -1,6 +1,5 @@
 package mydudesgeo.entity;
 
-import com.vividsolutions.jts.geom.Point;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -16,6 +15,8 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.time.ZonedDateTime;
+import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,9 +24,6 @@ import lombok.Setter;
 import mydudesgeo.data.Visibility;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-
-import java.time.ZonedDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "geo_parties")
@@ -51,9 +49,11 @@ public class Party {
     @JoinColumn(name = "category", referencedColumnName = "category")
     private PartyCategory category;
 
-    @Column(name = "location")
-    @JdbcTypeCode(SqlTypes.JSON)
-    private Point location;
+    @Column(name = "latitude")
+    private Double latitude;
+
+    @Column(name = "longitude")
+    private Double longitude;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "creator", referencedColumnName = "nickname")

@@ -1,14 +1,16 @@
 package mydudesgeo.dto.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.time.LocalDate;
+import java.util.List;
 import lombok.Data;
 import mydudesgeo.entity.Hobby;
 
-import java.time.LocalDate;
-import java.util.List;
-
 @Data
 public class UpdateUserInfoDto {
+
+    @Schema(description = "Id пользователя")
+    private Long id;
 
     @Schema(description = "Имя")
     private String firstName;
@@ -32,6 +34,6 @@ public class UpdateUserInfoDto {
     private boolean freezeLocation;
 
     @Schema(description = "Увлечения")
-    private List<Hobby> hobbies;
+    private List<Hobby> hobbies; //todo fix
 
 }

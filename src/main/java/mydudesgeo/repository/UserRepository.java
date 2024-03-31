@@ -11,6 +11,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByNickname(String nickname);
 
+    @Query("""
+            select u.freezeLocation from User u where u.nickname = :nickname
+            """)
+    Boolean findFreezeFlagByNickname(String nickname);
+
     @Modifying
     @Query("""
             update User set photo = null where nickname = :nickname

@@ -1,5 +1,6 @@
 package mydudesgeo.dto.user;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
@@ -7,8 +8,10 @@ import lombok.Data;
 public class LoginUserDto {
 
     @NotBlank
+    @Schema(description = "Логин(ник пользователя)")
     private String login;
 
     @NotBlank
+    @Schema(description = "Пароль")
     private String password;
 }

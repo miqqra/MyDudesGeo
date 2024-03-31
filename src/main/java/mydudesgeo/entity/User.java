@@ -11,13 +11,12 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
+import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Table(name = "geo_users")
@@ -46,7 +45,7 @@ public class User {
     private LocalDate birthDate; //todo make format
 
     @Column(name = "sex")
-    private String sex;
+    private String sex; //todo make enum?
 
     @Column(name = "info")
     private String info;

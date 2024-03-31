@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import mydudesgeo.dto.user.UpdateUserInfoDto;
 import mydudesgeo.dto.user.UserDto;
 import mydudesgeo.service.UserService;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,31 +27,42 @@ public class UserController {
     private final UserService service;
 
     @GetMapping("/{nickname}")
-    @Operation(description = "Получение информации пользователя")
+    @Operation(summary = "Получение информации пользователя")
     public UserDto getInfo(@Parameter(description = "Ник пользователя") @PathVariable String nickname) {
         return service.getInfo(nickname);
     }
 
+    //todo edit or delete
     @PostMapping
-    @Operation(description = "Создание профиля пользователя")
+    @Operation(summary = "Создание профиля пользователя")
     public UserDto createInfo(@Validated @RequestBody UpdateUserInfoDto dto) {
         return service.createInfo(dto);
     }
 
     @PutMapping
-    @Operation(description = "Редактирование информации пользователя")
+    @Operation(summary = "Редактирование информации пользователя")
     public UserDto updateInfo(@Validated @RequestBody UpdateUserInfoDto dto) {
         return service.updateInfo(dto);
     }
 
-    @PutMapping("/photo")
-    @Operation(description = "Изменить фото профиля")
-    public void changePhoto(@RequestParam MultipartFile photo) {
+    @PutMapping(
+            path = "/photo",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "Изменить фото профиля")
+    public void changePhoto(@Parameter(description = "Фото") @RequestParam MultipartFile photo) {
         service.changePhoto(photo);
     }
 
+    @GetMapping(
+            path = "/photo/{nickname}",
+            produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "Получение фото пользователя")
+    public byte[] getPhoto(@Parameter(description = "Никнейм пользователя") @RequestParam String nickname) {
+        return service.getPhoto(nickname);
+    }
+
     @DeleteMapping("/photo")
-    @Operation(description = "Удалить фото профиля")
+    @Operation(summary = "Удалить фото профиля")
     public void deletePhoto() {
         service.deletePhoto();
     }
