@@ -151,9 +151,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="category" type="text"
-                    remarks="Тип мероприятия">
-                <constraints nullable="false"/>
-            </column>
+                    remarks="Тип мероприятия"/>
             <column name="latitude" type="double" remarks="Широта">
                 <constraints nullable="false"/>
             </column>

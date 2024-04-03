@@ -32,9 +32,9 @@ public class UserPartyController {
     @Operation(summary = "Получение информации обо всех мероприятиях в радиусе r километров")
     @PostMapping("/around")
     public List<PartyShortInfoDto> getParties(
-            @Parameter(description = "Радиус, в котором будут искаться меропрятия", required = true) @RequestParam Double r,
+            @Parameter(description = "Радиус, в котором будут искаться меропрятия (в километрах)", required = true) @RequestParam Double radius,
             @RequestBody Location point) {
-        return service.getPartiesAround(r, point);
+        return service.getPartiesAround(radius, point);
     }
 
     @Operation(summary = "Поиск мероприятий по названия мероприятия или по организатору")

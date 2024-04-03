@@ -13,6 +13,9 @@ public class PartyShortInfoDto {
     @Schema(description = "Название мероприятия")
     private String name;
 
+    @Schema(description = "Никнейм организатора")
+    private String creator;
+
     @Schema(description = "Время начала и конца мероприятия")
     private PartyTimeInfoDto time;
 

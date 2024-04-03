@@ -10,4 +10,6 @@ public interface PartyCategoryRepository extends JpaRepository<PartyCategory, Lo
     boolean existsById(Long id);
 
     boolean existsByCategory(String category);
+
+    PartyCategory findByCategory(String category);
 }

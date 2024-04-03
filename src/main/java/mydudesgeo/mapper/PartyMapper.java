@@ -8,6 +8,7 @@ import mydudesgeo.dto.party.PartyDto;
 import mydudesgeo.dto.party.PartyShortInfoDto;
 import mydudesgeo.dto.party.UpdatePartyDto;
 import mydudesgeo.entity.Party;
+import mydudesgeo.model.PartyCategoryModel;
 import mydudesgeo.model.PartyModel;
 import mydudesgeo.model.UserModel;
 import org.mapstruct.AfterMapping;
@@ -51,14 +52,23 @@ public abstract class PartyMapper {
                 .toList());
     }
 
+    @Mapping(target = "time.startTime", source = "startTime")
+    @Mapping(target = "time.endTime", source = "endTime")
+    @Mapping(target = "creator", source = "creator.nickname")
     public abstract PartyShortInfoDto toShortInfoDto(PartyModel source);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "name", source = "source.name")
+    @Mapping(target = "description", source = "source.description")
+    @Mapping(target = "category", source = "category")
+    @Mapping(target = "location", source = "source.location")
+    @Mapping(target = "creator", source = "creator")
     @Mapping(target = "participants", ignore = true)
     @Mapping(target = "limits", ignore = true)
-    @Mapping(target = "category.category", source = "category")
-    @Mapping(target = "creator.nickname", source = "creator")
-    public abstract PartyModel toModel(CreatePartyDto source);
+    @Mapping(target = "visibility", source = "source.visibility")
+    @Mapping(target = "startTime", source = "source.startTime")
+    @Mapping(target = "endTime", source = "source.endTime")
+    public abstract PartyModel toModel(CreatePartyDto source, UserModel creator, PartyCategoryModel category);
 
     @AfterMapping
     protected void postMap(@MappingTarget PartyModel target, CreatePartyDto source) {

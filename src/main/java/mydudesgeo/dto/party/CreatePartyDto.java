@@ -3,11 +3,10 @@ package mydudesgeo.dto.party;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.time.ZonedDateTime;
 import lombok.Data;
 import mydudesgeo.common.Location;
 import mydudesgeo.data.Visibility;
-
-import java.time.ZonedDateTime;
 
 @Data
 @Schema(description = "Запрос на создание мероприятия")
@@ -28,10 +27,6 @@ public class CreatePartyDto {
     @NotNull
     @Schema(description = "Локация мероприятия")
     private Location location;
-
-    @NotBlank
-    @Schema(description = "Id организатора")
-    private String creator;
 
     @Schema(description = "Ограничение по количеству человек")
     private Integer limits;

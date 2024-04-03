@@ -1,10 +1,15 @@
 package mydudesgeo.service;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import mydudesgeo.common.Location;
 import mydudesgeo.data.Visibility;
 import mydudesgeo.dataservice.FriendsDataService;
+import mydudesgeo.dataservice.PartyCategoryDataService;
 import mydudesgeo.dataservice.PartyDataService;
+import mydudesgeo.dataservice.UserDataService;
 import mydudesgeo.dto.party.CreatePartyDto;
 import mydudesgeo.dto.party.PartyDto;
 import mydudesgeo.dto.party.PartyShortInfoDto;
@@ -12,12 +17,10 @@ import mydudesgeo.dto.party.UpdatePartyDto;
 import mydudesgeo.dto.party.UpdateVisibilityDto;
 import mydudesgeo.exception.ClientException;
 import mydudesgeo.mapper.PartyMapper;
+import mydudesgeo.model.PartyCategoryModel;
+import mydudesgeo.model.UserModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +28,8 @@ public class PartyService {
 
     private final PartyDataService dataService;
     private final FriendsDataService friendsDataService;
+    private final UserDataService userDataService;
+    private final PartyCategoryDataService partyCategoryDataService;
 
 
     private final PartyMapper mapper;
@@ -75,9 +80,18 @@ public class PartyService {
     }
 
     public PartyDto createParty(CreatePartyDto dto) {
+        UserModel creator = Optional.of(UserCredentialsService.getCurrentUser())
+                .map(userDataService::getInfo)
+                .orElseThrow(() -> ClientException.of(HttpStatus.NOT_FOUND, "Пользователь не найден"));
+
+        PartyCategoryModel partyCategory = Optional.of(dto)
+                .map(CreatePartyDto::getCategory)
+                .map(partyCategoryDataService::getCategoryByName)
+                .orElse(null);
+
         //todo checkVisibility
         return Optional.of(dto)
-                .map(mapper::toModel)
+                .map(v -> mapper.toModel(v, creator, partyCategory))
                 .map(dataService::createParty)
                 .map(mapper::toDto)
                 .orElseThrow(() -> ClientException.of(HttpStatus.BAD_REQUEST, "Не удалось создать мероприятие"));

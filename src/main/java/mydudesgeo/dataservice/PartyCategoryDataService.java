@@ -1,15 +1,14 @@
 package mydudesgeo.dataservice;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import mydudesgeo.mapper.PartyCategoryMapper;
 import mydudesgeo.model.PartyCategoryModel;
 import mydudesgeo.repository.PartyCategoryRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +25,14 @@ public class PartyCategoryDataService {
                 .flatMap(Collection::stream)
                 .map(mapper::toModel)
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public PartyCategoryModel getCategoryByName(String categoryName) {
+        return Optional.of(categoryName)
+                .map(repository::findByCategory)
+                .map(mapper::toModel)
+                .orElse(null);
     }
 
     @Transactional
