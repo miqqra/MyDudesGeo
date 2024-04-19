@@ -3,7 +3,7 @@ services:
   app:
     container_name: MyDudesGeoBackend
     build:
-      context: .
+      dockerfile: MyDudesGeoBackend.Dockerfile
     ports:
       - "8080:8080"
     depends_on:
