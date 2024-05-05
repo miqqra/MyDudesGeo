@@ -85,4 +85,7 @@ public class Party {
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "party_id", referencedColumnName = "id", updatable = false)
     private List<PartyRole> roles;
+
+    @Column(name = "link")
+    private String link;
 }

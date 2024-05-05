@@ -26,6 +26,8 @@ spring:
 
 mydudes:
   config:
+    dobro:
+      nickname: DobroRu
     search:
       polygon:
         points: 16

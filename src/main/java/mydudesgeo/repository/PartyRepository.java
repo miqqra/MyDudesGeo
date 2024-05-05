@@ -1,11 +1,10 @@
 package mydudesgeo.repository;
 
+import java.util.List;
 import mydudesgeo.entity.Party;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface PartyRepository extends JpaRepository<Party, Long> {
@@ -27,4 +26,6 @@ public interface PartyRepository extends JpaRepository<Party, Long> {
             :radius * 1000, true) = true
             """)
     List<Party> getPartiesAround(Double latitude, Double longitude, Double radius);
+
+    boolean existsByLink(String link);
 }
