@@ -1,5 +1,6 @@
 package mydudesgeo.service;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -18,9 +19,11 @@ import mydudesgeo.dto.party.UpdateVisibilityDto;
 import mydudesgeo.exception.ClientException;
 import mydudesgeo.mapper.PartyMapper;
 import mydudesgeo.model.PartyCategoryModel;
+import mydudesgeo.model.PartyModel;
 import mydudesgeo.model.UserModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -126,5 +129,25 @@ public class PartyService {
         }
 
         dataService.deleteParty(id);
+    }
+
+    public byte[] getPhoto(Long id) {
+        return Optional.of(id)
+                .map(dataService::getParty)
+                .map(PartyModel::getPhoto)
+                .orElse(null);
+    }
+
+    public void changePhoto(MultipartFile file, Long id) {
+        try {
+            byte[] content = file.getBytes();
+            dataService.changePhoto(content, id);
+        } catch (IOException e) {
+            throw ClientException.of(HttpStatus.BAD_REQUEST, "Ошибка при обработке фото");
+        }
+    }
+
+    public void deletePhoto(Long id) {
+        dataService.deletePhoto(id);
     }
 }

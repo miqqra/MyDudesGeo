@@ -25,6 +25,9 @@ spring:
     contexts: schema, data
 
 mydudes:
+  telegram:
+    bot:
+      token:
   config:
     dobro:
       nickname: DobroRu

@@ -30,7 +30,7 @@ public class PartyDataService {
 
     @Transactional(readOnly = true)
     public boolean existsByLink(String link) {
-        return repository.existsByLink(link);
+        return repository.existsByLinkDobro(link);
     }
 
     @Transactional(readOnly = true)
@@ -103,5 +103,15 @@ public class PartyDataService {
     @Transactional
     public void deleteParty(Long id) {
         repository.deleteById(id);
+    }
+
+    @Transactional
+    public void changePhoto(byte[] file, Long id) {
+        repository.updatePhoto(file, id);
+    }
+
+    @Transactional
+    public void deletePhoto(Long id) {
+        repository.deletePhotoByNickname(id);
     }
 }

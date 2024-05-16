@@ -21,10 +21,10 @@
             <column name="city" type="text" remarks="Город">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <column name="latitude" type="double" remarks="Широта">
+            <column name="latitude" type="float" remarks="Широта">
                 <constraints nullable="false"/>
             </column>
-            <column name="longitude" type="double" remarks="Долгота">
+            <column name="longitude" type="float" remarks="Долгота">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -67,12 +67,13 @@
     <changeSet id="3" author="krasnikov" context="schema">
         <preConditions>
             <not>
-                <columnExists tableName="geo_parties" columnName="link"/>
+                <columnExists tableName="geo_parties" columnName="link_dobro"/>
             </not>
         </preConditions>
 
         <addColumn tableName="geo_parties">
-            <column name="link" type="text" remarks="Ссылка на мероприятие, если мероприятие было мигрировано"/>
+            <column name="link_dobro" type="text"
+                    remarks="Ссылка на мероприятие в dobro.ru, если мероприятие было мигрировано"/>
         </addColumn>
     </changeSet>
 

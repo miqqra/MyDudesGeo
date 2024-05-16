@@ -20,6 +20,8 @@ public class PartyModel {
     private Visibility visibility;
     private ZonedDateTime startTime;
     private ZonedDateTime endTime;
-    private String link;
+    private String linkDobro;
+    private Long chatIdTelegram; //todo fix migration
+    private byte[] photo;
 
 }

@@ -36,4 +36,7 @@ public class UpdateUserInfoDto {
     @Schema(description = "Увлечения")
     private List<Hobby> hobbies; //todo fix
 
+    @Schema(description = "Ник в Telegram")
+    private String telegramNick;
+
 }

@@ -72,7 +72,8 @@ public abstract class PartyMapper {
     @Mapping(target = "visibility", source = "source.visibility")
     @Mapping(target = "startTime", source = "source.startTime")
     @Mapping(target = "endTime", source = "source.endTime")
-    @Mapping(target = "link", ignore = true)
+    @Mapping(target = "linkDobro", ignore = true)
+    @Mapping(target = "chatIdTelegram", ignore = true)
     public abstract PartyModel toModel(CreatePartyDto source, UserModel creator, PartyCategoryModel category);
 
     @Mapping(target = "id", ignore = true)
@@ -81,15 +82,16 @@ public abstract class PartyMapper {
     @Mapping(target = "location.longitude", source = "longitude")
     @Mapping(target = "participants", expression = "java(emptyParticipantsList())")
     @Mapping(target = "limits", expression = "java(defaultLimit())")
+    @Mapping(target = "chatIdTelegram", ignore = true)
     public abstract PartyModel toModel(String name,
                                        String description,
                                        UserModel creator,
                                        Visibility visibility,
                                        ZonedDateTime startTime,
                                        ZonedDateTime endTime,
-                                       Double latitude,
-                                       Double longitude,
-                                       String link);
+                                       Float latitude,
+                                       Float longitude,
+                                       String linkDobro);
 
     public List<UserModel> emptyParticipantsList() {
         return Collections.emptyList();

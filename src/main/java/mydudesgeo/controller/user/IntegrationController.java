@@ -1,6 +1,7 @@
 package mydudesgeo.controller.user;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import mydudesgeo.dto.party.PartyDto;
 import mydudesgeo.service.PartyIntegrationService;
@@ -18,20 +19,9 @@ public class IntegrationController {
 
     @PostMapping("/dobro/ru")
     @Operation(summary = "Создание мероприятия из Добро.ру")
-    public PartyDto createPartyFromDobroRu(@RequestHeader String url) {
+    public PartyDto createPartyFromDobroRu(
+            @RequestHeader @Parameter(description = "Ссылка на мероприятие в dobro.ru") String url) {
         return service.createPartyFromDobroRu(url);
-    }
-
-    @PostMapping("/vk/migrate")
-    @Operation(summary = "Создание мероприятия в MyDudes на основе мероприятия VK")
-    public PartyDto migratePartyFromVk() {
-        return service.migratePartyFromVk();
-    }
-
-    @PostMapping("/vk/create")
-    @Operation(summary = "Создание мероприятия в VK на основе мероприятия MyDudes")
-    public PartyDto createPartyInVk() {
-        return service.createPartyInVk();
     }
 
 }

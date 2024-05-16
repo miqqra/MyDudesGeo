@@ -36,10 +36,10 @@ public class UserLocation {
     private User user;
 
     @Column(name = "latitude")
-    private Double latitude;
+    private Float latitude;
 
     @Column(name = "longitude")
-    private Double longitude;
+    private Float longitude;
 
     @Column(name = "time")
     private ZonedDateTime time;

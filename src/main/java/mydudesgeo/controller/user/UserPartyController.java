@@ -11,6 +11,7 @@ import mydudesgeo.dto.party.PartyShortInfoDto;
 import mydudesgeo.dto.party.UpdatePartyDto;
 import mydudesgeo.dto.party.UpdateVisibilityDto;
 import mydudesgeo.service.PartyService;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RestController
@@ -60,7 +62,6 @@ public class UserPartyController {
     @GetMapping("/{user}")
     public List<PartyDto> getUsersParties(
             @Parameter(description = "id пользователя", required = true) @PathVariable String user) {
-        //todo swagger api responses
         return service.getUserParties(user);
     }
 
@@ -81,5 +82,29 @@ public class UserPartyController {
     @DeleteMapping("/{id}")
     public void deleteParty(@Parameter(description = "Id мероприятия", required = true) @PathVariable Long id) {
         service.deleteParty(id);
+    }
+
+
+    @PutMapping(
+            path = "/photo/{id}",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "Изменить фото мероприятия")
+    public void changePhoto(@Parameter(description = "Фото") @RequestParam MultipartFile photo,
+                            @Parameter(description = "Id мероприятия") @RequestParam Long id) {
+        service.changePhoto(photo, id);
+    }
+
+    @GetMapping(
+            path = "/photo/{id}",
+            produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "Получение фото мероприятия")
+    public byte[] getPhoto(@Parameter(description = "Id мероприятия") @RequestParam Long id) {
+        return service.getPhoto(id);
+    }
+
+    @DeleteMapping("/photo/{id}")
+    @Operation(summary = "Удалить фото мероприятия")
+    public void deletePhoto(@Parameter(description = "Id мероприятия") @RequestParam Long id) {
+        service.deletePhoto(id);
     }
 }

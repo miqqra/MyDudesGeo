@@ -3,6 +3,7 @@ package mydudesgeo.repository;
 import java.util.List;
 import mydudesgeo.entity.Party;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -25,7 +26,19 @@ public interface PartyRepository extends JpaRepository<Party, Long> {
             ST_MakePoint(:latitude, :longitude),
             :radius * 1000, true) = true
             """)
-    List<Party> getPartiesAround(Double latitude, Double longitude, Double radius);
+    List<Party> getPartiesAround(Float latitude, Float longitude, Double radius);
 
-    boolean existsByLink(String link);
+    boolean existsByLinkDobro(String linkDobro);
+
+    @Modifying
+    @Query("""
+            update Party set photo = null where id = :id
+            """)
+    void deletePhotoByNickname(Long id);
+
+    @Modifying
+    @Query("""
+            update User set photo = :photo where id = :id
+            """)
+    void updatePhoto(byte[] photo, Long id);
 }

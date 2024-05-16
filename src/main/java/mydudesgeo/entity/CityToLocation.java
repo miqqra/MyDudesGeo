@@ -29,9 +29,9 @@ public class CityToLocation {
     private String city;
 
     @Column(name = "latitude")
-    private Double latitude;
+    private Float latitude;
 
     @Column(name = "longitude")
-    private Double longitude;
+    private Float longitude;
 
 }

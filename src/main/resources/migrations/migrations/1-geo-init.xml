@@ -92,10 +92,10 @@
             <column name="nickname" type="text" remarks="Ник пользователя">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <column name="latitude" type="double" remarks="Широта">
+            <column name="latitude" type="float" remarks="Широта">
                 <constraints nullable="false"/>
             </column>
-            <column name="longitude" type="double" remarks="Долгота">
+            <column name="longitude" type="float" remarks="Долгота">
                 <constraints nullable="false"/>
             </column>
             <column name="time" type="timestamptz"
@@ -152,10 +152,10 @@
             </column>
             <column name="category" type="text"
                     remarks="Тип мероприятия"/>
-            <column name="latitude" type="double" remarks="Широта">
+            <column name="latitude" type="float" remarks="Широта">
                 <constraints nullable="false"/>
             </column>
-            <column name="longitude" type="double" remarks="Долгота">
+            <column name="longitude" type="float" remarks="Долгота">
                 <constraints nullable="false"/>
             </column>
             <column name="creator" type="text" remarks="Создатель мероприятия">

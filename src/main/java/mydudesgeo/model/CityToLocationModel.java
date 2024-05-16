@@ -7,7 +7,7 @@ public class CityToLocationModel {
 
     private Long id;
     private String city;
-    private Double latitude;
-    private Double longitude;
+    private Float latitude;
+    private Float longitude;
 
 }
