@@ -40,8 +40,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Modifying
     @Query("""
-            update User set tgChatId = :tgChatId where nickname = :nickname
+            update User set telegramChatId = :telegramChatId where nickname = :nickname
             """)
-    void setTgChatId(String nickname, Long tgChatId);
+    void setTelegramChatIdChatId(String nickname, Long telegramChatId);
 
 }

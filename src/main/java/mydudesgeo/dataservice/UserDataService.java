@@ -54,7 +54,7 @@ public class UserDataService {
 
     @Transactional
     public void setChatId(String nickname, Long chatId) {
-        repository.setTgChatId(nickname, chatId);
+        repository.setTelegramChatIdChatId(nickname, chatId);
     }
 
     @Transactional
