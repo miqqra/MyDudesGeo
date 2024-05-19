@@ -64,7 +64,7 @@
         </insert>
     </changeSet>
 
-    <changeSet id="3" author="krasnikov" context="schema">
+    <changeSet id="4" author="krasnikov" context="schema">
         <preConditions>
             <not>
                 <columnExists tableName="geo_parties" columnName="link_dobro"/>

@@ -13,7 +13,7 @@
             </not>
         </preConditions>
 
-        <addColumn tableName="geo_users">
+        <addColumn tableName="geo_parties">
             <column name="photo" type="blob" remarks="Фото мероприятия"/>
         </addColumn>
     </changeSet>

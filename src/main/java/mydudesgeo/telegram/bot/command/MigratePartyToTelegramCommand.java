@@ -31,7 +31,7 @@ public class MigratePartyToTelegramCommand implements BotCommand {
     public boolean supports(Update update) {
         try {
             Long.parseLong(update.message().text().split(" ")[1]);
-            return true;
+            return supports(update);
         } catch (Exception e) {
             return false;
         }

@@ -14,21 +14,19 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class HelloCommand implements BotCommand {
 
-    private PartyIntegrationService partyIntegrationService;
+    private final PartyIntegrationService partyIntegrationService;
     private final String command = "/hello";
     private final String description = "Помаши ручкой боту";
 
     @Override
     public SendMessage handle(Update update) {
-        Optional.of(update)
+        return Optional.of(update)
                 .map(Update::message)
                 .map(MaybeInaccessibleMessage::chat)
-                .ifPresent(v -> partyIntegrationService.addUserChatId(v.username(), v.id()));
-        return null;
-    }
-
-    @Override
-    public boolean supports(Update update) {
-        return true;
+                .map(v -> {
+                    partyIntegrationService.addUserChatId(v.username(), v.id());
+                    return new SendMessage(v.id(), "Привет! Я тебя запомнил! :)");
+                })
+                .orElse(null);
     }
 }

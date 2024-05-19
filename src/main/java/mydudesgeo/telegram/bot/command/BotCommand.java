@@ -14,7 +14,12 @@ public interface BotCommand {
 
     SendMessage handle(Update update);
 
-    boolean supports(Update update);
+    default boolean supports(Update update) {
+        if (update.message() == null || update.message().text() == null) {
+            return false;
+        }
+        return update.message().text().split(" ")[0].equals(getCommand());
+    }
 
     default Long getChatId(Update update) {
         return Optional.of(update)
@@ -22,5 +27,6 @@ public interface BotCommand {
                 .map(Message::chat)
                 .map(Chat::id)
                 .orElse(null);
+
     }
 }

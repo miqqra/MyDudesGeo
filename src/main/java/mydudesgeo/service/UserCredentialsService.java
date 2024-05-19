@@ -36,11 +36,11 @@ public class UserCredentialsService {
     private final AuthenticationManager authenticationManager;
 
     public static String getCurrentUser() {
-        return "Klim";
-//        return Optional.of(SecurityContextHolder.getContext())
-//                .map(SecurityContext::getAuthentication)
-//                .map(Principal::getName)
-//                .orElseThrow(() -> ClientException.of(HttpStatus.FORBIDDEN, "Клиент не авторизован"));
+//        return "Klim";
+        return Optional.of(SecurityContextHolder.getContext())
+                .map(SecurityContext::getAuthentication)
+                .map(Principal::getName)
+                .orElseThrow(() -> ClientException.of(HttpStatus.FORBIDDEN, "Клиент не авторизован"));
     }
 
     public boolean registerUser(RegistrateUserDto dto, HttpServletRequest httpServletRequest) {

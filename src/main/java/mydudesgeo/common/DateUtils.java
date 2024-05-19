@@ -48,9 +48,29 @@ public class DateUtils {
         String[] datesAndTimes = timeStamp.split(", ");
         String[] dates = datesAndTimes[0].split(" – ");
         String[] times = datesAndTimes[1].split(" - ");
-        return new ZonedDateTime[]{
-                toDateFromRussian(dates[0], times[0]),
-                toDateFromRussian(dates[1], times[1])
-        };
+        if (dates.length == 1 && times.length == 1) {
+            return new ZonedDateTime[]{
+                    toDateFromRussian(dates[0], times[0])
+            };
+        } else if (dates.length == 2 && times.length == 1) {
+            return new ZonedDateTime[]{
+                    toDateFromRussian(dates[0], times[0]),
+                    toDateFromRussian(dates[1], times[0])
+            };
+        } else if (dates.length == 2 && times.length == 2) {
+            return new ZonedDateTime[]{
+                    toDateFromRussian(dates[0], times[0]),
+                    toDateFromRussian(dates[1], times[1])
+            };
+        } else if (dates.length == 1 && times.length == 2) {
+            return new ZonedDateTime[]{
+                    toDateFromRussian(dates[0], times[0]),
+                    toDateFromRussian(dates[0], times[1])
+            };
+        } else {
+            return new ZonedDateTime[]{
+                    ZonedDateTime.now()
+            };
+        }
     }
 }

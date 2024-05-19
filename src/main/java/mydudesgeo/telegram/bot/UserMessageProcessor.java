@@ -5,14 +5,14 @@ import com.pengrad.telegrambot.request.SendMessage;
 import java.util.List;
 import lombok.Data;
 import mydudesgeo.telegram.bot.command.BotCommand;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Data
 @Service
 public class UserMessageProcessor {
 
-    @Qualifier("botCommands")
+    @Autowired
     private List<BotCommand> commands;
 
     public SendMessage process(Update update) {

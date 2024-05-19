@@ -2,8 +2,6 @@ package mydudesgeo.mapper;
 
 import java.time.ZonedDateTime;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import mydudesgeo.data.Visibility;
 import mydudesgeo.dto.party.CreatePartyDto;
@@ -67,7 +65,7 @@ public abstract class PartyMapper {
     @Mapping(target = "category", source = "category")
     @Mapping(target = "location", source = "source.location")
     @Mapping(target = "creator", source = "creator")
-    @Mapping(target = "participants", expression = "java(emptyParticipantsList())")
+    @Mapping(target = "participants", ignore = true)
     @Mapping(target = "limits", source = "source", qualifiedByName = "limit")
     @Mapping(target = "visibility", source = "source.visibility")
     @Mapping(target = "startTime", source = "source.startTime")
@@ -80,9 +78,10 @@ public abstract class PartyMapper {
     @Mapping(target = "category", ignore = true)
     @Mapping(target = "location.latitude", source = "latitude")
     @Mapping(target = "location.longitude", source = "longitude")
-    @Mapping(target = "participants", expression = "java(emptyParticipantsList())")
+    @Mapping(target = "participants", ignore = true)
     @Mapping(target = "limits", expression = "java(defaultLimit())")
     @Mapping(target = "chatIdTelegram", ignore = true)
+    @Mapping(target = "photo", ignore = true)
     public abstract PartyModel toModel(String name,
                                        String description,
                                        UserModel creator,
@@ -92,10 +91,6 @@ public abstract class PartyMapper {
                                        Float latitude,
                                        Float longitude,
                                        String linkDobro);
-
-    public List<UserModel> emptyParticipantsList() {
-        return Collections.emptyList();
-    }
 
     public Integer defaultLimit() {
         return limits;

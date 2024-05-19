@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class Bot {
 
-    @Value("mydudes.telegram.bot.token")
+    @Value("${mydudes.telegram.bot.token}")
     private String token;
 
     private TelegramBot telegramBot;
@@ -39,8 +39,12 @@ public class Bot {
         telegramBot = new TelegramBot(token);
 
         telegramBot.setUpdatesListener(updates -> {
-            this.process(updates);
-            return UpdatesListener.CONFIRMED_UPDATES_ALL;
+            try {
+                this.process(updates);
+                return UpdatesListener.CONFIRMED_UPDATES_ALL;
+            } finally {
+                return UpdatesListener.CONFIRMED_UPDATES_ALL; //todo updates not clear
+            }
         });
     }
 }

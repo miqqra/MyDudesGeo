@@ -1,5 +1,6 @@
 package mydudesgeo.service;
 
+import com.pengrad.telegrambot.model.Update;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -34,8 +35,10 @@ public class PartyIntegrationService {
     private final static String PARTY_DESCRIPTION = "Описание мероприятия: %s";
     private final static String PARTY_INFO = "Мероприятие \"%s\" перенесено из MyDudes. Кратко о мите:";
 
+    @Value("${mydudes.config.limit}")
+    private Integer defaultLimit;
 
-    @Value("mydudes.config.dobro.nickname")
+    @Value("${mydudes.config.dobro.nickname}")
     private String dobroNickname;
 
     private final TgBotService tgBotService; //todo two different services?
@@ -58,10 +61,12 @@ public class PartyIntegrationService {
             String partyDescription = findPartyDescription(doc);
             ZonedDateTime[] dates = findStartTimeAndEndTime(doc);
             ZonedDateTime startTime = dates[0];
-            ZonedDateTime endTime = dates[1];
+            ZonedDateTime endTime = dates.length > 1 ? dates[1] : null;
 
             UserModel creator = userDataService.getInfo(dobroNickname);
-            CityToLocationModel cityToLocationModel = cityToLocationDataService.findByCity(city);
+            CityToLocationModel cityToLocationModel = Optional.of(city)
+                    .map(cityToLocationDataService::findByCity)
+                    .orElseGet(cityToLocationDataService::findAnyLocationModel);
 
             var party = partyMapper.toModel(partyName, partyDescription, creator, Visibility.ALL, startTime,
                     endTime, cityToLocationModel.getLatitude(), cityToLocationModel.getLongitude(), url);
@@ -104,23 +109,29 @@ public class PartyIntegrationService {
                 .getFirst().text();
     }
 
-    public void migratePartyFromTelegram(Long chatId) {
+    public void migratePartyFromTelegram(Update update) {
+        Long chatId = update.message().chat().id();
+
         List<String> telegramNicknames = tgBotService.getChatMembers(chatId);
         List<UserModel> myDudesUsers = userDataService.getUsersFromTelegram(telegramNicknames);
 
-        UserModel creator = Optional.of(UserCredentialsService.getCurrentUser())
-                .map(userDataService::getInfo)
-                .orElse(null);
+        String sender = tgBotService.getSender(update);
+        UserModel creator = userDataService.getUsersFromTelegram(List.of(sender)).getFirst();
 
         String name = tgBotService.getChatName(chatId);
         String description = tgBotService.getChatDescription(chatId);
-        Location location = tgBotService.getChatLocation(chatId);
+        Location location = Optional.of(chatId)
+                .map(tgBotService::getChatLocation)
+                .orElseGet(cityToLocationDataService::findAnyLocation);
+        tgBotService.getChatLocation(chatId);
 
         PartyModel party = new PartyModel()
                 .setCreator(creator)
                 .setDescription(description)
                 .setName(name)
                 .setLocation(location)
+                .setLimits(defaultLimit)
+                .setStartTime(ZonedDateTime.now())
                 .setChatIdTelegram(chatId)
                 .setParticipants(myDudesUsers)
                 .setVisibility(Visibility.ALL);
