@@ -1,5 +1,6 @@
 package mydudesgeo;
 
+import mydudesgeo.telegram.bot.Bot;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -7,7 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MyDudesGeoApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(MyDudesGeoApplication.class, args);
+        var ctx = SpringApplication.run(MyDudesGeoApplication.class, args);
+        ctx.getBean(Bot.class).start();
     }
 
 }

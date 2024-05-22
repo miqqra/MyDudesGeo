@@ -28,7 +28,7 @@ public class UserService {
                 .orElseThrow(() -> ClientException.of(HttpStatus.NOT_FOUND, "Пользователь не найден"));
     }
 
-    public UserDto createInfo(UpdateUserInfoDto dto) {
+    public UserDto createInfo(UpdateUserInfoDto dto) { //todo skip null value fields
         String nickname = UserCredentialsService.getCurrentUser();
 
         return Optional.of(dto)
@@ -41,8 +41,10 @@ public class UserService {
     public UserDto updateInfo(UpdateUserInfoDto dto) {
         String nickname = UserCredentialsService.getCurrentUser();
 
+        UserModel userModel = dataService.getInfo(nickname);
+
         return Optional.of(dto)
-                .map(v -> mapper.toModel(v, nickname))
+                .map(v -> mapper.toModel(userModel, v))
                 .map(dataService::create)
                 .map(mapper::toDto)
                 .orElseThrow(() -> ClientException.of(HttpStatus.NOT_FOUND, "Не удалось обновить профиль пользоввателя"));

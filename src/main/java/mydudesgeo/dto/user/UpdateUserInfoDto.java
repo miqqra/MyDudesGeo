@@ -9,9 +9,6 @@ import mydudesgeo.entity.Hobby;
 @Data
 public class UpdateUserInfoDto {
 
-    @Schema(description = "Id пользователя")
-    private Long id;
-
     @Schema(description = "Имя")
     private String firstName;
 
@@ -35,5 +32,8 @@ public class UpdateUserInfoDto {
 
     @Schema(description = "Увлечения")
     private List<Hobby> hobbies; //todo fix
+
+    @Schema(description = "Ник в Telegram")
+    private String telegramNick;
 
 }

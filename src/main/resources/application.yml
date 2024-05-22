@@ -11,9 +11,7 @@ server:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    #    todo env
-    url: jdbc:postgresql://host.docker.internal:5432/postgres
-    # url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: postgres
   jpa:
@@ -27,12 +25,17 @@ spring:
     contexts: schema, data
 
 mydudes:
+  telegram:
+    bot:
+      token:
   config:
+    dobro:
+      nickname: DobroRu
     search:
       polygon:
         points: 16
       radius: 2000 #2km
-    limit: 100
+    limit: 20
     categories:
       number: 3
 

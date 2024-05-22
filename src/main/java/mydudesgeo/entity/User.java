@@ -54,6 +54,12 @@ public class User {
     @Lob
     private byte[] photo;
 
+    @Column(name = "tg_nickname")
+    private String telegramNick; //todo
+
+    @Column(name = "tg_chat_id")
+    private Long telegramChatId; //todo
+
     @Column(name = "freeze_location")
     private boolean freezeLocation;
 

@@ -7,7 +7,7 @@ import lombok.Data;
 public class Location {
 
     @Schema(description = "Широта")
-    private Double latitude;
+    private Float latitude;
     @Schema(description = "Долгота")
-    private Double longitude;
+    private Float longitude;
 }

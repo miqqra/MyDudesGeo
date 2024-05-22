@@ -1,11 +1,10 @@
 package mydudesgeo.model;
 
+import java.time.ZonedDateTime;
+import java.util.List;
 import lombok.Data;
 import mydudesgeo.common.Location;
 import mydudesgeo.data.Visibility;
-
-import java.time.ZonedDateTime;
-import java.util.List;
 
 @Data
 public class PartyModel {
@@ -21,5 +20,8 @@ public class PartyModel {
     private Visibility visibility;
     private ZonedDateTime startTime;
     private ZonedDateTime endTime;
+    private String linkDobro;
+    private Long chatIdTelegram;
+    private byte[] photo;
 
 }

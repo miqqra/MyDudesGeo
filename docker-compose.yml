@@ -1,25 +1,32 @@
-version: '3.8'
+version: '2.3'
 services:
-  app:
-    container_name: MyDudesGeoBackend
-    build:
-      dockerfile: MyDudesGeoBackend.Dockerfile
-    ports:
-      - "8080:8080"
-    depends_on:
-      - postgres
-  postgres:
+  postgis_container:
     image: "postgis/postgis:15-master"
-    container_name: postgres
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+    expose:
+      - 5432
     ports:
       - "5432:5432"
     volumes:
+      - ./pg_hba.conf:/var/lib/foo/pg_hba.conf
       - postgres-data:/var/lib/postgresql/data
+    command: [ "postgres", "-c", "hba_file=/var/lib/foo/pg_hba.conf" ]
     restart: always
+  app:
+    container_name: MyDudesGeoBackend
+    build:
+      context: .
+      dockerfile: MyDudesGeoBackend.Dockerfile
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgis_container:5432/postgres?sslmode=disable
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgis_container
+    restart: on-failure
 
 volumes:
   postgres-data:
