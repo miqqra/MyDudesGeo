@@ -1,5 +1,7 @@
 package mydudesgeo.dataservice;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import mydudesgeo.mapper.UserMapper;
@@ -24,6 +26,16 @@ public class UserDataService {
                 .orElse(null);
     }
 
+    @Transactional(readOnly = true)
+    public List<UserModel> getUsersFromTelegram(List<String> tgNicknames) {
+        return Optional.of(tgNicknames)
+                .map(repository::findAllByTelegramNickIn)
+                .stream()
+                .flatMap(Collection::stream)
+                .map(mapper::toModel)
+                .toList();
+    }
+
     @Transactional
     public UserModel create(UserModel userModel) {
         return Optional.of(userModel)
@@ -38,6 +50,11 @@ public class UserDataService {
         return Optional.of(nickname)
                 .map(repository::findFreezeFlagByNickname)
                 .orElse(null);
+    }
+
+    @Transactional
+    public void setChatId(String nickname, Long chatId) {
+        repository.setTelegramChatIdChatId(nickname, chatId);
     }
 
     @Transactional

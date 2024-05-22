@@ -1,8 +1,9 @@
 package mydudesgeo.mapper;
 
+import java.time.ZonedDateTime;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
+import mydudesgeo.data.Visibility;
 import mydudesgeo.dto.party.CreatePartyDto;
 import mydudesgeo.dto.party.PartyDto;
 import mydudesgeo.dto.party.PartyShortInfoDto;
@@ -15,6 +16,7 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Value;
 
 @Mapper(uses = {
@@ -48,7 +50,7 @@ public abstract class PartyMapper {
                 .map(PartyModel::getParticipants)
                 .stream()
                 .flatMap(Collection::stream)
-                .map(UserModel::getFullName)
+                .map(UserModel::getNickname)
                 .toList());
     }
 
@@ -64,19 +66,38 @@ public abstract class PartyMapper {
     @Mapping(target = "location", source = "source.location")
     @Mapping(target = "creator", source = "creator")
     @Mapping(target = "participants", ignore = true)
-    @Mapping(target = "limits", ignore = true)
+    @Mapping(target = "limits", source = "source", qualifiedByName = "limit")
     @Mapping(target = "visibility", source = "source.visibility")
     @Mapping(target = "startTime", source = "source.startTime")
     @Mapping(target = "endTime", source = "source.endTime")
+    @Mapping(target = "linkDobro", ignore = true)
+    @Mapping(target = "chatIdTelegram", ignore = true)
     public abstract PartyModel toModel(CreatePartyDto source, UserModel creator, PartyCategoryModel category);
 
-    @AfterMapping
-    protected void postMap(@MappingTarget PartyModel target, CreatePartyDto source) {
-        if (source == null) {
-            return;
-        }
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "category", ignore = true)
+    @Mapping(target = "location.latitude", source = "latitude")
+    @Mapping(target = "location.longitude", source = "longitude")
+    @Mapping(target = "participants", ignore = true)
+    @Mapping(target = "limits", expression = "java(defaultLimit())")
+    @Mapping(target = "chatIdTelegram", ignore = true)
+    @Mapping(target = "photo", ignore = true)
+    public abstract PartyModel toModel(String name,
+                                       String description,
+                                       UserModel creator,
+                                       Visibility visibility,
+                                       ZonedDateTime startTime,
+                                       ZonedDateTime endTime,
+                                       Float latitude,
+                                       Float longitude,
+                                       String linkDobro);
 
-        target.setParticipants(Collections.emptyList());
-        target.setLimits(source.getLimits() == null ? limits : source.getLimits());
+    public Integer defaultLimit() {
+        return limits;
+    }
+
+    @Named("limit")
+    public Integer limit(CreatePartyDto source) {
+        return source.getLimits() == null ? limits : source.getLimits();
     }
 }

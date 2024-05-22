@@ -1,5 +1,6 @@
 package mydudesgeo.mapper;
 
+import mydudesgeo.dto.friend.FriendRequestDto;
 import mydudesgeo.entity.FriendRequest;
 import mydudesgeo.model.FriendRequestModel;
 import org.mapstruct.Mapper;
@@ -19,4 +20,8 @@ public abstract class FriendRequestMapper {
     public abstract FriendRequest toEntity(FriendRequestModel source);
 
     public abstract FriendRequestModel toModel(FriendRequest source);
+
+    @Mapping(target = "requestFrom", source = "requestFrom.nickname")
+    @Mapping(target = "requestTo", source = "requestTo.nickname")
+    public abstract FriendRequestDto toDto(FriendRequestModel source);
 }

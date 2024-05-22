@@ -1,5 +1,8 @@
 package mydudesgeo.dataservice;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import mydudesgeo.common.Location;
 import mydudesgeo.data.Visibility;
@@ -12,10 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class PartyDataService {
@@ -27,6 +26,11 @@ public class PartyDataService {
     @Transactional(readOnly = true)
     public boolean existsById(Long id) {
         return repository.existsById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean existsByLink(String link) {
+        return repository.existsByLinkDobro(link);
     }
 
     @Transactional(readOnly = true)
@@ -99,5 +103,15 @@ public class PartyDataService {
     @Transactional
     public void deleteParty(Long id) {
         repository.deleteById(id);
+    }
+
+    @Transactional
+    public void changePhoto(byte[] file, Long id) {
+        repository.updatePhoto(file, id);
+    }
+
+    @Transactional
+    public void deletePhoto(Long id) {
+        repository.deletePhotoByNickname(id);
     }
 }

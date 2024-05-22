@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -50,10 +51,10 @@ public class Party {
     private PartyCategory category;
 
     @Column(name = "latitude")
-    private Double latitude;
+    private Float latitude;
 
     @Column(name = "longitude")
-    private Double longitude;
+    private Float longitude;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "creator", referencedColumnName = "nickname")
@@ -85,4 +86,14 @@ public class Party {
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "party_id", referencedColumnName = "id", updatable = false)
     private List<PartyRole> roles;
+
+    @Column(name = "link_dobro")
+    private String linkDobro;
+
+    @Column(name = "chat_id_telegram")
+    private Long chatIdTelegram; //todo private chat id long instead
+
+    @Column(name = "photo")
+    @Lob
+    private byte[] photo; //todo
 }

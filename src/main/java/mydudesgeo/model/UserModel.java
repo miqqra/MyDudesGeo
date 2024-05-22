@@ -1,13 +1,12 @@
 package mydudesgeo.model;
 
-import lombok.Data;
-import mydudesgeo.entity.Hobby;
-import org.apache.commons.lang3.StringUtils;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Data;
+import mydudesgeo.entity.Hobby;
+import org.apache.commons.lang3.StringUtils;
 
 @Data
 public class UserModel {
@@ -22,6 +21,8 @@ public class UserModel {
     private byte[] photo;
     private boolean freezeLocation;
     private List<Hobby> hobbies;
+    private String telegramNick;
+    private Long telegramChatId;
 
     public String getFullName() {
         return Stream.of(firstName, lastName)

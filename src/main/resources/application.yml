@@ -25,12 +25,17 @@ spring:
     contexts: schema, data
 
 mydudes:
+  telegram:
+    bot:
+      token:
   config:
+    dobro:
+      nickname: DobroRu
     search:
       polygon:
         points: 16
       radius: 2000 #2km
-    limit: 100
+    limit: 20
     categories:
       number: 3
 

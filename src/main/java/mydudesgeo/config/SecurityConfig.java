@@ -34,7 +34,6 @@ public class SecurityConfig {
                                 "/api-docs/**"
                         ).permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-//                                .anyRequest().permitAll()
                         .anyRequest().authenticated()
                 );
 
