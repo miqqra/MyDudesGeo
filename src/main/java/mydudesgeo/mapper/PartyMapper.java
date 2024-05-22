@@ -50,7 +50,7 @@ public abstract class PartyMapper {
                 .map(PartyModel::getParticipants)
                 .stream()
                 .flatMap(Collection::stream)
-                .map(UserModel::getFullName)
+                .map(UserModel::getNickname)
                 .toList());
     }
 

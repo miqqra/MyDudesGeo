@@ -39,6 +39,25 @@ public class UserPartyController {
         return service.getPartiesAround(radius, point);
     }
 
+    @Operation(summary = "Записаться на мероприятие")
+    @PutMapping("/join")
+    public PartyDto joinParty(@Parameter(description = "Id мероприятия") @RequestParam Long id) {
+        return service.joinParty(id);
+    }
+
+    @Operation(summary = "Покинуть мероприятие")
+    @PutMapping("/leave")
+    public PartyDto leaveParty(@Parameter(description = "Id мероприятия") @RequestParam Long id) {
+        return service.leaveParty(id);
+    }
+
+    @Operation(summary = "Удалить юзера из мероприятия")
+    @PutMapping("/kick")
+    public PartyDto kickUserFromParty(@Parameter(description = "Ник пользователя") @RequestParam String username,
+                                      @Parameter(description = "Id мероприятия") @RequestParam Long id) {
+        return service.kickUserFromParty(username, id);
+    }
+
     @Operation(summary = "Поиск мероприятий по названия мероприятия или по организатору")
     @GetMapping("/find")
     public List<PartyShortInfoDto> findParties(@Parameter(description = "Поле для поиска") @RequestParam String search) {

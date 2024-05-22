@@ -72,6 +72,102 @@ public class PartyService {
                 .toList();
     }
 
+    public PartyDto joinParty(Long id) {
+        UserModel currentUser = Optional.of(UserCredentialsService.getCurrentUser())
+                .map(userDataService::getInfo)
+                .orElseThrow(() -> ClientException.of(HttpStatus.NOT_FOUND, "Пользователь не найден"));
+
+        PartyModel partyModel = Optional.of(id)
+                .map(dataService::getParty)
+                .orElseThrow(() -> ClientException.of(HttpStatus.NOT_FOUND, "Мероприятие не найдено"));
+
+        if (partyModel.getParticipants().contains(currentUser)) {
+            throw ClientException.of(HttpStatus.BAD_REQUEST, "Вы уже являетесь учатсником мероприятия");
+        }
+
+        return Optional.of(partyModel)
+                .map(v -> {
+                    v.getParticipants().add(currentUser);
+                    return v;
+                })
+                .map(dataService::createParty)
+                .map(v -> {
+                    tgNotifyService.notify(
+                            TgNotifies.NEW_PARTICIPANT.getMessage().formatted(v.getName(), currentUser.getNickname()), v);
+                    return v;
+                })
+                .map(mapper::toDto)
+                .orElseThrow(() -> ClientException.of(HttpStatus.NOT_FOUND, "Мероприятие не найдено"));
+    }
+
+    public PartyDto leaveParty(Long id) {
+        UserModel currentUser = Optional.of(UserCredentialsService.getCurrentUser())
+                .map(userDataService::getInfo)
+                .orElseThrow(() -> ClientException.of(HttpStatus.NOT_FOUND, "Пользователь не найден"));
+
+        PartyModel partyModel = Optional.of(id)
+                .map(dataService::getParty)
+                .orElseThrow(() -> ClientException.of(HttpStatus.NOT_FOUND, "Мероприятие не найдено"));
+
+        if (partyModel.getCreator().getNickname().equals(currentUser.getNickname())) {
+            throw ClientException.of(HttpStatus.BAD_REQUEST, "Вы являетесь организатором этого мероприятия и не можете покинуть его");
+        }
+
+        if (!partyModel.getParticipants().contains(currentUser)) {
+            throw ClientException.of(HttpStatus.BAD_REQUEST, "Вы не являетесь участником мероприятия");
+        }
+
+        return Optional.of(partyModel)
+                .map(v -> {
+                    v.getParticipants().remove(currentUser);
+                    return v;
+                })
+                .map(dataService::createParty)
+                .map(v -> {
+                    tgNotifyService.notify(
+                            TgNotifies.PARTICIPANT_LEAVED.getMessage().formatted(currentUser.getNickname(), v.getName()), v);
+                    return v;
+                })
+                .map(mapper::toDto)
+                .orElseThrow(() -> ClientException.of(HttpStatus.NOT_FOUND, "Мероприятие не найдено"));
+    }
+
+    public PartyDto kickUserFromParty(String username, Long id) {
+        UserModel currentUser = Optional.of(UserCredentialsService.getCurrentUser())
+                .map(userDataService::getInfo)
+                .orElseThrow(() -> ClientException.of(HttpStatus.NOT_FOUND, "Пользователь не найден"));
+
+        UserModel userToBeKicked = Optional.of(username)
+                .map(userDataService::getInfo)
+                .orElseThrow(() -> ClientException.of(HttpStatus.NOT_FOUND, "Пользователь не найден"));
+
+        PartyModel partyModel = Optional.of(id)
+                .map(dataService::getParty)
+                .orElseThrow(() -> ClientException.of(HttpStatus.NOT_FOUND, "Мероприятие не найдено"));
+
+        if (!partyModel.getCreator().getNickname().equals(currentUser.getNickname())) {
+            throw ClientException.of(HttpStatus.BAD_REQUEST, "Вы не являетесь организатором этого мероприятия и не можете удалять участников");
+        }
+
+        if (!partyModel.getParticipants().contains(userToBeKicked)) {
+            throw ClientException.of(HttpStatus.BAD_REQUEST, "Пользователь не является участником мероприятия");
+        }
+
+        return Optional.of(partyModel)
+                .map(v -> {
+                    v.getParticipants().remove(userToBeKicked);
+                    return v;
+                })
+                .map(dataService::createParty)
+                .map(v -> {
+                    tgNotifyService.notify(
+                            TgNotifies.PARTICIPANT_KICKED.getMessage().formatted(userToBeKicked.getNickname(), v.getName()), v);
+                    return v;
+                })
+                .map(mapper::toDto)
+                .orElseThrow(() -> ClientException.of(HttpStatus.NOT_FOUND, "Мероприятие не найдено"));
+    }
+
     public List<PartyShortInfoDto> findParties(String search) {
         //todo add filter
 
@@ -143,11 +239,17 @@ public class PartyService {
     }
 
     public void changePhoto(MultipartFile file, Long id) {
-        validateCurrentUserIsCreator(id);
+        PartyModel partyModel = Optional.of(id)
+                .map(dataService::getParty)
+                .orElseThrow(() -> ClientException.of(HttpStatus.NOT_FOUND, "Мероприятие не найдено"));
+
+        validateCurrentUserIsCreator(partyModel);
 
         try {
             byte[] content = file.getBytes();
             dataService.changePhoto(content, id);
+            tgNotifyService.notify(
+                    TgNotifies.CHANGE_PHOTO.getMessage().formatted(partyModel.getName()), partyModel);
         } catch (IOException e) {
             throw ClientException.of(HttpStatus.BAD_REQUEST, "Ошибка при обработке фото");
         }
