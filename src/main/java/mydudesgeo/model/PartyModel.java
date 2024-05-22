@@ -21,7 +21,7 @@ public class PartyModel {
     private ZonedDateTime startTime;
     private ZonedDateTime endTime;
     private String linkDobro;
-    private Long chatIdTelegram; //todo fix migration
+    private Long chatIdTelegram;
     private byte[] photo;
 
 }

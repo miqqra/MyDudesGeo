@@ -29,9 +29,16 @@ public class MigratePartyToTelegramCommand implements BotCommand {
 
     @Override
     public boolean supports(Update update) {
+        boolean emptyText = update.message() == null || update.message().text() == null;
+        boolean incorrectCommand = !update.message().text().split(" ")[0].equals(getCommand());
+
+        if (emptyText || incorrectCommand) {
+            return false;
+        }
+
         try {
             Long.parseLong(update.message().text().split(" ")[1]);
-            return supports(update);
+            return true;
         } catch (Exception e) {
             return false;
         }

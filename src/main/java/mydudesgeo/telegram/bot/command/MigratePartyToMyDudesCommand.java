@@ -1,5 +1,6 @@
 package mydudesgeo.telegram.bot.command;
 
+import com.pengrad.telegrambot.model.Chat;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import java.util.Optional;
@@ -20,6 +21,8 @@ public class MigratePartyToMyDudesCommand implements BotCommand {
     @Override
     public SendMessage handle(Update update) {
         Optional.of(update)
+                .filter(v -> v.message().chat().type().equals(Chat.Type.group)
+                        || v.message().chat().type().equals(Chat.Type.supergroup))
                 .ifPresent(partyIntegrationService::migratePartyFromTelegram);
         return null;
     }

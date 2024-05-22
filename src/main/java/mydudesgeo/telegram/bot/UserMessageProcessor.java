@@ -21,12 +21,10 @@ public class UserMessageProcessor {
                 .filter(command -> command.supports(update))
                 .findAny()
                 .orElse(null);
-        if (correctCommand == null) {
-            BotCommand anyCommand = getCommands().getFirst();
-            return new SendMessage(
-                    anyCommand.getChatId(update), "Некорректная команда");
+        if (correctCommand != null) {
+            return correctCommand.handle(update);
         }
-        return correctCommand.handle(update);
+        return null;
     }
 
 

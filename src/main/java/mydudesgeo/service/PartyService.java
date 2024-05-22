@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import mydudesgeo.common.Location;
+import mydudesgeo.common.TgNotifies;
 import mydudesgeo.data.Visibility;
 import mydudesgeo.dataservice.FriendsDataService;
 import mydudesgeo.dataservice.PartyCategoryDataService;
@@ -33,7 +34,7 @@ public class PartyService {
     private final FriendsDataService friendsDataService;
     private final UserDataService userDataService;
     private final PartyCategoryDataService partyCategoryDataService;
-
+    private final TgNotifyService tgNotifyService;
 
     private final PartyMapper mapper;
 
@@ -101,19 +102,21 @@ public class PartyService {
     }
 
     public PartyDto updateParty(Long id, UpdatePartyDto dto) {
-        //todo checkVisibility
-        if (!dataService.existsById(id)) {
-            throw ClientException.of(HttpStatus.NOT_FOUND, "Мероприятие не найдено");
-        }
+        validateCurrentUserIsCreator(id);
 
         return Optional.of(id)
                 .map(v -> dataService.updateParty(id, dto))
+                .map(v -> {
+                    tgNotifyService.notify(TgNotifies.PARTY_UPDATE.getMessage().formatted(v.getName()), v);
+                    return v;
+                })
                 .map(mapper::toDto)
                 .orElseThrow(() -> ClientException.of(HttpStatus.BAD_REQUEST, "Ошибка изменения мероприятия"));
     }
 
     public PartyDto updatePartyVisibility(UpdateVisibilityDto dto) {
-        //todo checkVisibility
+        validateCurrentUserIsCreator(dto.getId());
+
         return Optional.of(dto)
                 .map(UpdateVisibilityDto::getVisibility)
                 .map(Visibility::valueOf)
@@ -123,7 +126,8 @@ public class PartyService {
     }
 
     public void deleteParty(Long id) {
-        //todo check visivility
+        validateCurrentUserIsCreator(id);
+
         if (!dataService.existsById(id)) {
             throw ClientException.of(HttpStatus.NOT_FOUND, "Мероприятие не найдено");
         }
@@ -139,6 +143,8 @@ public class PartyService {
     }
 
     public void changePhoto(MultipartFile file, Long id) {
+        validateCurrentUserIsCreator(id);
+
         try {
             byte[] content = file.getBytes();
             dataService.changePhoto(content, id);
@@ -148,6 +154,24 @@ public class PartyService {
     }
 
     public void deletePhoto(Long id) {
+        validateCurrentUserIsCreator(id);
+
         dataService.deletePhoto(id);
+    }
+
+    private void validateCurrentUserIsCreator(PartyModel partyModel) {
+        String currentUser = UserCredentialsService.getCurrentUser();
+
+        if (!partyModel.getCreator().getNickname().equals(currentUser)) {
+            throw ClientException.of(HttpStatus.NOT_FOUND, "Вы не можете выполнить это действие, не будучи организатором");
+        }
+    }
+
+    private void validateCurrentUserIsCreator(Long partyId) {
+        PartyModel partyModel = Optional.of(partyId)
+                .map(dataService::getParty)
+                .orElseThrow(() -> ClientException.of(HttpStatus.NOT_FOUND, "Мероприятие не найдено"));
+
+        validateCurrentUserIsCreator(partyModel);
     }
 }
