@@ -13,6 +13,7 @@ services:
     volumes:
       - ./pg_hba.conf:/var/lib/foo/pg_hba.conf
       - postgres-data:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d
     command: [ "postgres", "-c", "hba_file=/var/lib/foo/pg_hba.conf" ]
     restart: always
   app:

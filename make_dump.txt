@@ -1,0 +1,2 @@
+docker exec -t mydudesgeo-postgis_container-1 pg_dump -U postgres -F t postgres -f /tmp/mydatabase.tar
+docker cp mydudesgeo-postgis_container-1:/tmp/mydatabase.tar ./initdb/mydatabase.tar
