@@ -16,3 +16,15 @@ TELEGRAM_BOT_TOKEN=changeme
 POSTGRES_DB=postgres
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
+
+Для проверки исправности работы бэкенда
+Вызовите POST api/user/register
+{
+"nickname": "string",
+"firstName": "string",
+"lastName": "string",
+"password": "string",
+"matchingPassword": "string"
+}
+
+При ответе code 200 бэкенд работает исправно
