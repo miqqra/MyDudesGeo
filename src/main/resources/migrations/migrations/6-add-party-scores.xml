@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd"
+        logicalFilePath="migrations/migrations/6-add-party-scores.xml">
+
+    <changeSet id="1" author="krasnikov" context="schema">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="geo_party_visits"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="geo_party_visits">
+            <column name="id" type="bigserial" remarks="Id записи" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="id_user" type="bigint" remarks="Id пользователя">
+                <constraints nullable="false"/>
+            </column>
+            <column name="id_party" type="bigint" remarks="Id мероприятия">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="datetime" remarks="Дата выставления оценки">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addUniqueConstraint tableName="geo_party_visits" columnNames="id_user,id_party"/>
+        <addForeignKeyConstraint constraintName="geo_party_visits-id_user-id"
+                                 baseTableName="geo_party_visits"
+                                 baseColumnNames="id_user"
+                                 referencedTableName="geo_users"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint constraintName="geo_party_visits-id_party-id"
+                                 baseTableName="geo_party_visits"
+                                 baseColumnNames="id_party"
+                                 referencedTableName="geo_parties"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>
