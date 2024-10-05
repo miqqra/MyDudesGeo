@@ -7,7 +7,7 @@
         logicalFilePath="migrations/migrations/3-telegram-integration.xml">
 
     <changeSet id="1" author="krasnikov" context="schema">
-        <preConditions>
+        <preConditions onFail="MARK_RAN">
             <not>
                 <columnExists tableName="geo_users" columnName="tg_nickname"/>
             </not>
@@ -19,7 +19,7 @@
     </changeSet>
 
     <changeSet id="2" author="krasnikov" context="schema">
-        <preConditions>
+        <preConditions onFail="MARK_RAN">
             <not>
                 <columnExists tableName="geo_users" columnName="tg_user_id"/>
             </not>
@@ -32,7 +32,7 @@
 
 
     <changeSet id="3" author="krasnikov" context="schema">
-        <preConditions>
+        <preConditions onFail="MARK_RAN">
             <not>
                 <columnExists tableName="geo_parties" columnName="link_telegram"/>
             </not>

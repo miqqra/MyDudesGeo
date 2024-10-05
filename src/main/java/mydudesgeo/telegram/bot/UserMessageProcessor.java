@@ -6,10 +6,12 @@ import java.util.List;
 import lombok.Data;
 import mydudesgeo.telegram.bot.command.BotCommand;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 @Data
 @Service
+@ConditionalOnProperty(prefix = "mydudes.telegram.bot", name = "enabled", havingValue = "true")
 public class UserMessageProcessor {
 
     @Autowired

@@ -7,7 +7,7 @@
         logicalFilePath="migrations/migrations/4-add-party-photo.xml">
 
     <changeSet id="1" author="krasnikov" context="schema">
-        <preConditions>
+        <preConditions onFail="MARK_RAN">
             <not>
                 <columnExists tableName="geo_parties" columnName="photo"/>
             </not>

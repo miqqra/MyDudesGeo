@@ -27,6 +27,7 @@ spring:
 mydudes:
   telegram:
     bot:
+      enabled: false
       token:
   config:
     dobro:

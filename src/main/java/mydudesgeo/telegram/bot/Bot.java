@@ -10,10 +10,12 @@ import com.pengrad.telegrambot.response.BaseResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@ConditionalOnProperty(prefix = "mydudes.telegram.bot", name = "enabled", havingValue = "true")
 public class Bot {
 
     @Value("${mydudes.telegram.bot.token}")

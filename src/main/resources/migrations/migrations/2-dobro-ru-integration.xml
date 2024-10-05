@@ -47,7 +47,7 @@
     </changeSet>
 
     <changeSet id="3" author="krasnikov" context="data">
-        <preConditions>
+        <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 select count(*)
                 from geo_users
@@ -65,7 +65,7 @@
     </changeSet>
 
     <changeSet id="4" author="krasnikov" context="schema">
-        <preConditions>
+        <preConditions onFail="MARK_RAN">
             <not>
                 <columnExists tableName="geo_parties" columnName="link_dobro"/>
             </not>
