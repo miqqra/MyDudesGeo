@@ -21,7 +21,7 @@
     <changeSet id="2" author="krasnikov" context="schema">
         <preConditions onFail="MARK_RAN">
             <not>
-                <columnExists tableName="geo_users" columnName="tg_user_id"/>
+                <columnExists tableName="geo_users" columnName="tg_chat_id"/>
             </not>
         </preConditions>
 
@@ -34,7 +34,7 @@
     <changeSet id="3" author="krasnikov" context="schema">
         <preConditions onFail="MARK_RAN">
             <not>
-                <columnExists tableName="geo_parties" columnName="link_telegram"/>
+                <columnExists tableName="geo_parties" columnName="chat_id_telegram"/>
             </not>
         </preConditions>
 
