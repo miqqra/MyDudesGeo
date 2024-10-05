@@ -51,7 +51,7 @@
             <sqlCheck expectedResult="0">
                 select count(*)
                 from geo_users
-                where nickname = 'dobroRu'
+                where nickname = 'DobroRu'
             </sqlCheck>
         </preConditions>
 
