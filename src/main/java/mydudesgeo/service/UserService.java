@@ -21,6 +21,12 @@ public class UserService {
 
     private final UserMapper mapper;
 
+    public UserDto getCurrentUserInfo() {
+        return Optional.of(UserCredentialsService.getCurrentUser())
+                .map(this::getInfo)
+                .orElse(null);
+    }
+
     public UserDto getInfo(String nickname) {
         return Optional.of(nickname)
                 .map(dataService::getInfo)
