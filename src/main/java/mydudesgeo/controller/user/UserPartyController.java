@@ -126,4 +126,11 @@ public class UserPartyController {
     public void deletePhoto(@Parameter(description = "Id мероприятия") @RequestParam Long id) {
         service.deletePhoto(id);
     }
+
+    @GetMapping
+    @Operation(summary = "/")
+    //todo make with prev and not
+    public void getUserPartiesPlanned() {
+
+    }
 }

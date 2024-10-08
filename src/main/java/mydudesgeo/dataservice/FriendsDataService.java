@@ -1,12 +1,16 @@
 package mydudesgeo.dataservice;
 
 import com.vladmihalcea.hibernate.util.StringUtils;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import mydudesgeo.data.Visibility;
 import mydudesgeo.entity.friends.CloseFriends;
 import mydudesgeo.entity.friends.Friends;
 import mydudesgeo.exception.ClientException;
 import mydudesgeo.mapper.FriendMapper;
+import mydudesgeo.mapper.UserMapper;
 import mydudesgeo.model.FriendModel;
 import mydudesgeo.model.PartyModel;
 import mydudesgeo.model.UserModel;
@@ -16,8 +20,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class FriendsDataService {
@@ -26,6 +28,7 @@ public class FriendsDataService {
     private final CloseFriendsRepository closeFriendsRepository;
 
     private final FriendMapper mapper;
+    private final UserMapper userMapper;
 
     @Transactional(readOnly = true)
     public boolean friendExists(Visibility visibility, String person, String friend) {
@@ -39,6 +42,18 @@ public class FriendsDataService {
         return Optional.of(visibility)
                 .map(v -> getAll(visibility, authUser))
                 .orElse(null);
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserModel> getFriendsWhoVisitedParty(Long userId, Long partyId) {
+        //todo сделать проверку, что нельзя смотреть невидные тебе мероприятия
+        return Optional.of(userId)
+                .map(uid -> friendsRepository.getFriendsWhoVisitedTheParty(uid, partyId))
+                .stream()
+                .flatMap(Collection::stream)
+                .map(Friends::getFriend)
+                .map(userMapper::toModel)
+                .toList();
     }
 
     @Transactional
