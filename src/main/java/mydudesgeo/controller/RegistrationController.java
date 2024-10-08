@@ -25,7 +25,7 @@ public class RegistrationController {
     private final UserService userService;
 
     @GetMapping("/self")
-    @Operation(summary = "олучить данныео о юзере")
+    @Operation(summary = "Получить данные о юзере")
     public UserDto getCurrentUser() {
         return userService.getCurrentUserInfo();
     }
