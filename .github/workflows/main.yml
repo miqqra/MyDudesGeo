@@ -62,7 +62,7 @@ jobs:
         run: docker-compose -f docker-compose.yml up --build -d
 
       - name: Add tag
-        run: docker tag mydudesgeo-app:latest ${{ secrets.DOCKERHUB_USERNAME }}/mydudes:latest
+        run: docker tag docker.io/library/mydudesgeo_app:latest ${{ secrets.DOCKERHUB_USERNAME }}/mydudes:latest
 
       - name: Login to DockerHub
         run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
