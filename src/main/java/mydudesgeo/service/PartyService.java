@@ -248,8 +248,7 @@ public class PartyService {
         try {
             byte[] content = file.getBytes();
             dataService.changePhoto(content, id);
-            tgNotifyService.notify(
-                    TgNotifies.CHANGE_PHOTO.getMessage().formatted(partyModel.getName()), partyModel);
+            tgNotifyService.notify(TgNotifies.CHANGE_PHOTO.getMessage().formatted(partyModel.getName()), partyModel);
         } catch (IOException e) {
             throw ClientException.of(HttpStatus.BAD_REQUEST, "Ошибка при обработке фото");
         }

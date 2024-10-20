@@ -11,7 +11,11 @@ import mydudesgeo.dto.party.PartyShortInfoDto;
 import mydudesgeo.dto.party.UpdatePartyDto;
 import mydudesgeo.dto.party.UpdateVisibilityDto;
 import mydudesgeo.service.PartyService;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -103,9 +107,8 @@ public class UserPartyController {
         service.deleteParty(id);
     }
 
-
     @PutMapping(
-            path = "/photo/{id}",
+            path = "/photo",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Изменить фото мероприятия")
     public void changePhoto(@Parameter(description = "Фото") @RequestParam MultipartFile photo,
@@ -114,14 +117,28 @@ public class UserPartyController {
     }
 
     @GetMapping(
-            path = "/photo/{id}",
+            path = "/photo",
             produces = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Получение фото мероприятия")
-    public byte[] getPhoto(@Parameter(description = "Id мероприятия") @RequestParam Long id) {
-        return service.getPhoto(id);
+    public ResponseEntity<Resource> getPhoto(@Parameter(description = "Id мероприятия") @RequestParam Long id) {
+        byte[] bytes = service.getPhoto(id);
+
+        ByteArrayResource resource = new ByteArrayResource(bytes);
+
+        HttpHeaders header = new HttpHeaders();
+        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=image.jpg");
+        header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+        header.add("Pragma", "no-cache");
+        header.add("Expires", "0");
+
+        return ResponseEntity.ok()
+                .headers(header)
+                .contentLength(bytes.length)
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(resource);
     }
 
-    @DeleteMapping("/photo/{id}")
+    @DeleteMapping("/photo")
     @Operation(summary = "Удалить фото мероприятия")
     public void deletePhoto(@Parameter(description = "Id мероприятия") @RequestParam Long id) {
         service.deletePhoto(id);
