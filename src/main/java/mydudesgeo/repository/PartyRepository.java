@@ -38,7 +38,7 @@ public interface PartyRepository extends JpaRepository<Party, Long> {
 
     @Modifying
     @Query("""
-            update User set photo = :photo where id = :id
+            update Party set photo = :photo where id = :id
             """)
     void updatePhoto(byte[] photo, Long id);
 }
