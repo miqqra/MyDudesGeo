@@ -68,7 +68,7 @@ jobs:
         run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
       - name: Push Docker image
-        run: docker-compose -f docker-compose.yml push
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/mydudes:latest
 
   deploy:
     name: Deploy to Server
